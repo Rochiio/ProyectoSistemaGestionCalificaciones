@@ -1,4 +1,4 @@
-package models.evaluacion;
+package repositories;
 
 import java.util.List;
 

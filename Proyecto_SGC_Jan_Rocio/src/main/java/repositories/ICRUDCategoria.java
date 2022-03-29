@@ -1,4 +1,4 @@
-package models.categoria;
+package repositories;
 
 public interface ICRUDCategoria<T>{
 
