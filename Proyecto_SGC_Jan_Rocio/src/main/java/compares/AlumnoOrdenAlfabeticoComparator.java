@@ -1,6 +1,6 @@
 package compares;
 
-import models.Alumno;
+import models.alumno.Alumno;
 
 import java.util.Comparator;
 
