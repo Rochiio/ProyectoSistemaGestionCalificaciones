@@ -1,4 +1,4 @@
-package models;
+package models.alumno;
 
 import java.util.Date;
 import java.util.Objects;
