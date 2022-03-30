@@ -2,10 +2,12 @@ package repositories.categoria;
 
 import models.categoria.Categoria;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class CategoriaRepository implements ICRUDCategoriaRepository<Categoria> {
+public class CategoriaRepository implements ICategoriaRepository<Categoria> {
     private final Map<Integer, Categoria> categoria = new HashMap<>();
 
 
@@ -14,8 +16,25 @@ public class CategoriaRepository implements ICRUDCategoriaRepository<Categoria> 
      * @return Devuelve categoría.
      */
     @Override
-    public Categoria findAll() {
-        return (Categoria) this.categoria.values();
+    public List<Categoria> findAll() {
+        return new ArrayList<>(this.categoria.values());
+    }
+
+
+    /**
+     * Devuelve si una categoría tiene un nombre ya.
+     * @param name nombre de la categoría.
+     * @return null o categoría.
+     */
+    @Override
+    public Categoria findByName(String name) {
+        Categoria isExist = null;
+            for (Categoria categoria : this.categoria.values()){
+                if (categoria.getName().equals(name)){
+                    isExist =this.categoria.get(categoria.getId());
+                }
+            }
+        return isExist;
     }
 
 
@@ -34,13 +53,15 @@ public class CategoriaRepository implements ICRUDCategoriaRepository<Categoria> 
     /**
      * Actualiza una categoría.
      * @param id de la categoría que se quiere actualizar.
-     * @param item categoría nueva.
+     * @param newName categoría nueva.
      * @return Devuelve la categoría actualizada.
      */
     @Override
-    public Categoria update(Integer id, Categoria item) {
-        var exists = findById(item.getId());
-        this.categoria.get(id).setNombre((item.getNombre().isEmpty()) ? item.getNombre() : exists.getNombre());
+    public Categoria update(Integer id, String newName) {
+        var beforeData= this.categoria.get(id);
+            if (newName.isEmpty()|| beforeData.getName().equals(newName)){
+                this.categoria.get(id).setName((newName.isEmpty()) ? beforeData.getName() : newName);
+            }
         return this.categoria.get(id);
     }
 
@@ -51,13 +72,8 @@ public class CategoriaRepository implements ICRUDCategoriaRepository<Categoria> 
      * @param id que desea Buscar.
      * @return Devuelve la cateria, o nul si no existe.
      */
-    private Categoria findById(int id) {
-        for (var categoria : this.categoria.values()) {
-            if (categoria.getId() == id){
-                return categoria;
-            }
-        }
-        return null;
+    public Categoria findById(int id) {
+        return this.categoria.get(id);
     }
 
 
