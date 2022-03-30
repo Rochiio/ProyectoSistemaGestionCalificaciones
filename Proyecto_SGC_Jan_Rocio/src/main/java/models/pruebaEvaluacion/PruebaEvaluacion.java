@@ -1,6 +1,6 @@
 package models.pruebaEvaluacion;
 
-import repositories.CategoriaRepository;
+import repositories.categoria.CategoriaRepository;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -10,13 +10,13 @@ public class PruebaEvaluacion {
     //Declaración de los atributos de la clase
     private static int contador = 0;
     private int id;
-    private LocalDateTime fecha;
+    private Date fecha;
     private String descripcion;
     private CategoriaRepository categoriaRepository;
     private CalificacionRepository calificacionRepository;
 
 
-    public PruebaEvaluacion(LocalDateTime fecha, String descripcion, CategoriaRepository categoriaRepository, CalificacionRepository calificacionRepository) {
+    public PruebaEvaluacion(Date fecha, String descripcion, CategoriaRepository categoriaRepository, CalificacionRepository calificacionRepository) {
         this.id = ++contador;
         this.fecha = fecha;
         this.descripcion = descripcion;
@@ -40,11 +40,11 @@ public class PruebaEvaluacion {
         this.id = id;
     }
 
-    public LocalDateTime getFecha() {
+    public Date getFecha() {
         return fecha;
     }
 
-    public void setFecha(LocalDateTime fecha) {
+    public void setFecha(Date fecha) {
         this.fecha = fecha;
     }
 

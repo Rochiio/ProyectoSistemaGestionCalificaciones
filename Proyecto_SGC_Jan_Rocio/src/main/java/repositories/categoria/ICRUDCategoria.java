@@ -1,4 +1,4 @@
-package repositories;
+package repositories.categoria;
 
 public interface ICRUDCategoria<T>{
     T save(T item);

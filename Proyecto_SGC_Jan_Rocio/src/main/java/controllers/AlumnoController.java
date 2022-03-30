@@ -2,7 +2,7 @@ package controllers;
 
 import exceptions.AlumnoException;
 import models.alumno.Alumno;
-import repositories.IAlumnoRepository;
+import repositories.alumno.IAlumnoRepository;
 
 public class AlumnoController {
     private final IAlumnoRepository<Alumno> studentRepository;

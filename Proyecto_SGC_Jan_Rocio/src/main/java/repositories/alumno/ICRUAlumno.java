@@ -1,4 +1,4 @@
-package repositories;
+package repositories.alumno;
 
 public interface ICRUAlumno<T> {
     T create(T value);

@@ -3,6 +3,7 @@ package models.calificaciones;
 import models.alumno.Alumno;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Objects;
 
 public class Calificacion {
@@ -11,7 +12,7 @@ public class Calificacion {
     private int id;
     private Alumno alumno;
     private float nota;
-    private LocalDateTime createdAt;
+    private Date createdAt;
 
 
     /**
@@ -20,7 +21,7 @@ public class Calificacion {
      * @param nota nota del alumno.
      * @param localDateTime fecha de entrega de las notas.
      */
-    public Calificacion(Alumno alumno, float nota, LocalDateTime localDateTime) {
+    public Calificacion(Alumno alumno, float nota, Date localDateTime) {
         this.id = ++contador;
         this.alumno = alumno;
         this.nota = nota;
@@ -62,11 +63,11 @@ public class Calificacion {
         this.nota = nota;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
 

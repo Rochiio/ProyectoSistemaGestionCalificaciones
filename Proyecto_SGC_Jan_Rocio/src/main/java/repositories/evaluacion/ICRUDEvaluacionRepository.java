@@ -1,8 +1,8 @@
-package repositories;
+package repositories.evaluacion;
 
 import exceptions.evaluacionException;
 
-public interface ICRUDEvaluacionRepository<T> extends ICRUDEvaluacion<T>{
+public interface ICRUDEvaluacionRepository<T> extends ICRUDEvaluacion<T> {
     //Devuelve todas las evaluaciones
     T findAll();
 

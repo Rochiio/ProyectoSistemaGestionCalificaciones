@@ -1,6 +1,6 @@
 package models.evaluacion;
 
-import repositories.EvaluacionRepository;
+import repositories.evaluacion.EvaluacionRepository;
 
 import java.util.Objects;
 
