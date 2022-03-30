@@ -1,41 +1,77 @@
 package repositories;
 
+import com.diogonunes.jcolor.Attribute;
+import exceptions.evaluacionException;
 import models.evaluacion.Evaluacion;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
-public class EvaluacionRepository implements ICRUDEvaluacion<Evaluacion>, List<Evaluacion> {
-    public static EvaluacionRepository instance;
+import static com.diogonunes.jcolor.Ansi.colorize;
+
+public class EvaluacionRepository implements ICRUDEvaluacionRepository<Evaluacion> {
+    public final Map<Integer, Evaluacion>  evaluaciones = new HashMap<>();
+
+    /**
+     * Crea una evaluación
+     * @param eva que deseamos crea.
+     * @return Devuelve la evaluación que se ha añadido.
+     */
+    @Override
+    public Evaluacion save(Evaluacion eva) {
+        this.evaluaciones.put(eva.getId(), eva);
+        return this.evaluaciones.get(eva.getId());
+    }
 
 
-    public static EvaluacionRepository getInstance(){
-        if (instance == null){
-            instance = new EvaluacionRepository();
+    /**
+     * Devuelve todas la evaluaciones
+     * @return devuelve las evaluaciones
+     */
+    @Override
+    public Evaluacion findAll() {
+        return (Evaluacion) this.evaluaciones.values();
+    }
+
+
+
+
+    @Override
+    public Evaluacion create(Evaluacion eva) {
+        this.evaluaciones.put(eva.getId(), eva);
+        return this.evaluaciones.get(eva.getId());
+    }
+
+
+    /**
+     * Eliminar una evaluación
+     * @param eva que deseas eliminar.
+     * @return Devuelve la evaluación eliminada.
+     * @throws evaluacionException si la evaluación no existe.
+     */
+    @Override
+    public Evaluacion delete(Evaluacion eva) throws evaluacionException {
+        var existe = findById(eva.getId());
+        if (existe != null){
+            this.evaluaciones.remove(eva.getId());
+            return eva;
         }
-        return instance;
+        throw new evaluacionException(colorize("La evaluación que deseas eliminar no existe..", Attribute.RED_TEXT()));
     }
 
 
-
-
-    @Override
-    public List<Evaluacion> findAll() {
-        for (var evaluacion :  this.
-             ) {
-
+    /**
+     * Busca una evaluación por su id
+     * @param id de la evaluación a buscar.
+     * @return Devuelve la evaluación buscada, null si no existe.
+     */
+    private Evaluacion findById(int id) {
+        for (var eva : evaluaciones.values()) {
+            if (eva.getId() == id) {
+                return eva;
+            }
         }
+       return null;
     }
-
-    @Override
-    public Evaluacion save(Evaluacion item) {
-        return null;
-    }
-
-    @Override
-    public Evaluacion delete(Evaluacion item) {
-        return null;
-    }
-
-
 }

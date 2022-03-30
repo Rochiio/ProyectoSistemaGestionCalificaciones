@@ -1,13 +1,17 @@
 package repositories;
 
-import java.util.List;
+import exceptions.evaluacionException;
 
 public interface ICRUDEvaluacion<T> {
-    List<T> findAll();
 
+    //Devuelve todas la evaluaciones
+    T findAll();
+
+    //crear una evaluación
     T save (T item);
 
-    T delete(T item);
+    //Eliminar una evaluación
+    T delete(T item) throws evaluacionException;
 
 
 }

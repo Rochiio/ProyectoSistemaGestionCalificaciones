@@ -17,12 +17,12 @@ public class Evaluacion {
 
 
     /**
-     * Constructor
-     * @param notaMaxima
-     * @param notaMinima
-     * @param notaMedia
-     * @param porcentajeAprobado
-     * @param porcentajeSuspenso
+     * Constructor de evaluacion
+     * @param notaMaxima del alumno
+     * @param notaMinima el alumno
+     * @param notaMedia media del alumno
+     * @param porcentajeAprobado de todos los alumnos
+     * @param porcentajeSuspenso de todos los alumnos
      * @param evaluacionRepository
      */
     public Evaluacion(float notaMaxima, float notaMinima, float notaMedia, float porcentajeAprobado, float porcentajeSuspenso, EvaluacionRepository evaluacionRepository) {

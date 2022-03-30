@@ -1,6 +1,6 @@
-package models.alumno;
+package repositories;
 
-public interface ICrudAlumno<T> {
+public interface ICRUAlumno<T> {
     T create(T value);
     T delete(int id);
     T update(int id, T value);
