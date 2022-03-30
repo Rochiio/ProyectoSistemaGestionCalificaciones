@@ -57,7 +57,7 @@ public class Alumno {
      * @return el nombre del alumno.
      */
     public String getName() {
-        return name;
+        return this.name;
     }
 
     /**
@@ -72,7 +72,7 @@ public class Alumno {
      * @return los apellidos del alumno.
      */
     public String getLastName() {
-        return lastName;
+        return this.lastName;
     }
 
     /**
@@ -87,7 +87,7 @@ public class Alumno {
      * @return el email del usuario.
      */
     public String getEmail() {
-        return email;
+        return this.email;
     }
 
     /**
@@ -102,7 +102,7 @@ public class Alumno {
      * @return el teléfono del usuario.
      */
     public String getTelephone() {
-        return telephone;
+        return this.telephone;
     }
 
     /**
@@ -117,7 +117,7 @@ public class Alumno {
      * @return si ha perdido la evaluación continua o no.
      */
     public boolean isContinuousEvaluation() {
-        return continuousEvaluation;
+        return this.continuousEvaluation;
     }
 
     /**
@@ -133,7 +133,7 @@ public class Alumno {
      * @return el id del alumno.
      */
     public int getId() {
-        return id;
+        return this.id;
     }
 
     /**
@@ -141,7 +141,7 @@ public class Alumno {
      * @return la fecha de matriculación del alumno.
      */
     public Date getRegistrationDate() {
-        return RegistrationDate;
+        return this.RegistrationDate;
     }
 
     @Override
