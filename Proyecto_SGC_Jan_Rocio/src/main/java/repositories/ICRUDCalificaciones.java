@@ -1,6 +1,6 @@
 package repositories;
 
-public class ICRUDCalificaciones {
+public interface ICRUDCalificaciones {
     //TODO Tareas  por hacer.
     //TODO ICRUDCalificacionesRepository.
     //TODO CalificacionesRepositorio.
