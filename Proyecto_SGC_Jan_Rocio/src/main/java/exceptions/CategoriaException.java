@@ -4,12 +4,8 @@ import com.diogonunes.jcolor.Attribute;
 
 import static com.diogonunes.jcolor.Ansi.colorize;
 
-public class AlumnoException extends Exception{
-    /**
-     * Exception alumno.
-     * @param mensaje mensaje de excepcion.
-     */
-    public AlumnoException(String mensaje) {
+public class CategoriaException extends Exception{
+    public CategoriaException(String mensaje) {
         super(colorize(mensaje, Attribute.RED_TEXT()));
     }
 }

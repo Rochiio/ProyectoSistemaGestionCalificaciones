@@ -1,7 +1,10 @@
 package repositories.alumno;
 
+import exceptions.AlumnoException;
 import models.alumno.Alumno;
 
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -26,7 +29,7 @@ public class AlumnoRepository implements IAlumnoRepository<Alumno> {
      */
     @Override
     public List<Alumno> findAll() {
-        return (List<Alumno>) this.lista.values();
+        return new ArrayList<>(this.lista.values());
     }
 
 
@@ -44,6 +47,17 @@ public class AlumnoRepository implements IAlumnoRepository<Alumno> {
             }
         }
         return exist;
+    }
+
+
+    /**
+     * Para saber si el alumno está en alguna prueba de evaluación.
+     * @param id identificador del alumno.
+     * @return el número de pruebas de evaluación en las que está metido.
+     */
+    @Override
+    public int hasEvaluationTest(int id) {
+        return this.lista.get(id).getEvaluationTests();
     }
 
 
@@ -77,13 +91,18 @@ public class AlumnoRepository implements IAlumnoRepository<Alumno> {
      * @return el alumno actualizado.
      */
     @Override
-    public Alumno update(int id, Alumno value) {
+    public Alumno update(int id, Alumno value) throws AlumnoException {
         var beforeData = this.lista.get(id);
-            this.lista.get(id).setName((value.getName().isEmpty())? beforeData.getName(): value.getName());
-            this.lista.get(id).setLastName((value.getLastName().isEmpty())? beforeData.getLastName(): value.getLastName());
-            this.lista.get(id).setEmail((value.getEmail().isEmpty())? beforeData.getEmail(): value.getEmail());
-            this.lista.get(id).setTelephone((value.getTelephone().isEmpty())? beforeData.getTelephone(): value.getTelephone());
-            this.lista.get(id).setContinuousEvaluation(value.isContinuousEvaluation());
+            if (value.getDni().isEmpty()|| value.getDni().equals(beforeData.getDni())){
+                this.lista.get(id).setDni(value.getDni());
+                this.lista.get(id).setName((value.getName().isEmpty())? beforeData.getName(): value.getName());
+                this.lista.get(id).setLastName((value.getLastName().isEmpty())? beforeData.getLastName(): value.getLastName());
+                this.lista.get(id).setEmail((value.getEmail().isEmpty())? beforeData.getEmail(): value.getEmail());
+                this.lista.get(id).setTelephone((value.getTelephone().isEmpty())? beforeData.getTelephone(): value.getTelephone());
+                this.lista.get(id).setContinuousEvaluation(value.isContinuousEvaluation());
+            }else{
+                throw new AlumnoException("No puedes modificar el DNI de un alumno por el de otro");
+            }
         return this.lista.get(id);
     }
 

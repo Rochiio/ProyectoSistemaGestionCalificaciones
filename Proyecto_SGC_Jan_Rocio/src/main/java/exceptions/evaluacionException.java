@@ -4,13 +4,13 @@ import com.diogonunes.jcolor.Attribute;
 
 import static com.diogonunes.jcolor.Ansi.colorize;
 
-public class evaluacionException extends Exception{
+public class EvaluacionException extends Exception{
 
     /**
      * Exception de evaluación
-     * @param message menaje que queremos devolver de la exception
+     * @param message mensaje que queremos devolver de la exception
      */
-    public evaluacionException(String message){
+    public EvaluacionException(String message){
         super(colorize(message, Attribute.RED_TEXT()));
     }
 }
