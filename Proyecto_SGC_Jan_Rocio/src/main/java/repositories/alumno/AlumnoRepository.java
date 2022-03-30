@@ -1,4 +1,6 @@
-package models.alumno;
+package repositories.alumno;
+
+import models.alumno.Alumno;
 
 import java.util.HashMap;
 import java.util.List;

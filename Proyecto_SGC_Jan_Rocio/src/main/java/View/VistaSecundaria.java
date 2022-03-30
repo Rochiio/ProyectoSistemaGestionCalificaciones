@@ -3,7 +3,7 @@ package View;
 import controllers.AlumnoController;
 import exceptions.AlumnoException;
 import models.alumno.Alumno;
-import models.alumno.AlumnoRepository;
+import repositories.alumno.AlumnoRepository;
 import utils.Format;
 import utils.Inputs;
 
