@@ -38,9 +38,7 @@ public class VistaSecundaria {
                         Inputs.inputWithRegex("[A-Z][a-z]*[ ][A-Z][a-z]*","Dime los apellidos del alumno"),
                         Inputs.inputWithRegex("[a-zA-Z,0-9]+[@][a-zA-Z,0-9]+[.][a-z]+","Dime el email del alumno"),
                         Inputs.inputWithRegex("[0-9]{3}[-][0-9]{6}","Dime el número de teléfono del alumno [NNN-NNNNNN]"),
-                        (Inputs.inputWithRegex("^[0-1,$]$", "Tiene evaluación continua 1.Si 0.No").equals("1")),
-                        (Inputs.inputWithRegex("^([0-2][0-9]|3[0-1])(\\/|-)(0[1-9]|1[0-2])\\2(\\d{4})$",
-                                "Dime la fecha de matriculación del alumno"))
+                        (Inputs.inputWithRegex("^[0-1,$]$", "Tiene evaluación continua 1.Si 0.No").equals("1"))
                   );
 
                   var mostrar = studentController.add(newStudent);
@@ -117,8 +115,7 @@ public class VistaSecundaria {
                 Inputs.inputStrings("Dime los apellidos del alumno"),
                 Inputs.inputStrings("Dime el email del alumno"),
                 Inputs.inputStrings("Dime el número de teléfono del alumno [NNN-NNNNNN]"),
-                (Inputs.inputStrings( "Tiene evaluación continua 1.Si 0.No").equals("1")),
-                (Inputs.inputStrings("Dime la fecha de matriculación del alumno"))
+                (Inputs.inputStrings( "Tiene evaluación continua 1.Si 0.No").equals("1"))
         );
 
             try {

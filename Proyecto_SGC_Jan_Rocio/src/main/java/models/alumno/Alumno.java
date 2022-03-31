@@ -1,5 +1,9 @@
 package models.alumno;
 
+import utils.Format;
+
+import java.text.ParseException;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Alumno {
@@ -12,7 +16,7 @@ public class Alumno {
     private String telephone;       //NNN-NNNNNN
     private int evaluationTests=0;
     private boolean continuousEvaluation;
-    private final String registrationDate;      //DD/MM/AAAA
+    private final LocalDateTime registrationDate;      //DD/MM/AAAA
 
 
     /**
@@ -23,9 +27,8 @@ public class Alumno {
      * @param email Correo del alumno.
      * @param telephone Teléfono del alumno.
      * @param continuousEvaluation Si tiene o no evaluacion continua.
-     * @param registrationDate Fecha de registro/ matriculación.
      */
-    public Alumno(String dni, String name, String lastName, String email, String telephone, boolean continuousEvaluation, String registrationDate) {
+    public Alumno(String dni, String name, String lastName, String email, String telephone, boolean continuousEvaluation) {
         this.id = ++contador;
         this.dni = dni;
         this.name = name;
@@ -33,7 +36,7 @@ public class Alumno {
         this.email = email;
         this.telephone = telephone;
         this.continuousEvaluation = continuousEvaluation;
-        this.registrationDate = registrationDate;
+        this.registrationDate = LocalDateTime.now();
     }
 
 
@@ -98,9 +101,6 @@ public class Alumno {
         return this.id;
     }
 
-    public String getRegistrationDate() {
-        return this.registrationDate;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -117,7 +117,9 @@ public class Alumno {
 
     @Override
     public String toString() {
-                return "Alumno{" +
+        String returnString = "";
+            try {
+                returnString= "Alumno{" +
                         "id=" + id +
                         ", dni='" + dni + '\'' +
                         ", name='" + name + '\'' +
@@ -125,9 +127,16 @@ public class Alumno {
                         ", email='" + email + '\'' +
                         ", telephone='" + telephone + '\'' +
                         ", continuousEvaluation=" + continuousEvaluation +
-                        ", registrationDate=" + registrationDate +
+                        ", registrationDate=" + Format.formatDateShort(registrationDate) +
                         '}';
+            } catch (ParseException e) {
+                e.printStackTrace();
+        }
+        return returnString;
     }
+
+
+
 
 }
 
