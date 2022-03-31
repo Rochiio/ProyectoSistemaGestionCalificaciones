@@ -1,9 +1,7 @@
 package repositories.evaluacion;
 
-import com.diogonunes.jcolor.Attribute;
 import exceptions.EvaluacionException;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
