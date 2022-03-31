@@ -1,122 +1,106 @@
 package models.evaluacion;
 
-import repositories.evaluacion.EvaluacionRepository;
+import repositories.evaluacion.PruebaEvaluacionRepository;
+import repositories.evaluacion.IEvaluacionRepository;
+import repositories.evaluacion.PruebasEvaluacion;
 
 import java.util.Objects;
 
 public class Evaluacion {
     //Declaración de los atributos de la clase
     private static int contador = 0;
-    private int id;
-    private float notaMaxima;
-    private float notaMinima;
-    private float notaMedia;
-    private float porcentajeAprobado;
-    private float porcentajeSuspenso;
-    private EvaluacionRepository evaluacionRepository;
+    private final int id;
+    private float maximumNote;
+    private float minimumNote;
+    private float averageGrade;
+    private float passPercentages;
+    private float failPercentages;
+    private IEvaluacionRepository<PruebasEvaluacion> evaluationTestRepository;
 
 
     /**
      * Constructor de evaluacion
-     * @param notaMaxima del alumno
-     * @param notaMinima el alumno
-     * @param notaMedia media del alumno
-     * @param porcentajeAprobado de todos los alumnos
-     * @param porcentajeSuspenso de todos los alumnos
-     * @param evaluacionRepository
+     * @param maximumNote del alumno
+     * @param minimumNote el alumno
+     * @param averageGrade media del alumno
+     * @param passPercentages de todos los alumnos
+     * @param failPercentages de todos los alumnos
+     * @param evaluationTestRepository repositorio de pruebas de evaluación.
      */
-    public Evaluacion(float notaMaxima, float notaMinima, float notaMedia, float porcentajeAprobado, float porcentajeSuspenso, EvaluacionRepository evaluacionRepository) {
+    public Evaluacion(float maximumNote, float minimumNote, float averageGrade, float passPercentages,
+                      float failPercentages, IEvaluacionRepository<PruebasEvaluacion> evaluationTestRepository) {
         this.id = ++contador;
-        this.notaMaxima = notaMaxima;
-        this.notaMinima = notaMinima;
-        this.notaMedia = notaMedia;
-        this.porcentajeAprobado = porcentajeAprobado;
-        this.porcentajeSuspenso = porcentajeSuspenso;
-        this.evaluacionRepository = evaluacionRepository;
-    }
-
-
-
-    public Evaluacion(float porcentajeSuspenso) {
-        this.porcentajeSuspenso = porcentajeSuspenso;
-    }
-
-    public EvaluacionRepository getEvaluacionRepository() {
-        return evaluacionRepository;
-    }
-
-    public void setEvaluacionRepository(EvaluacionRepository evaluacionRepository) {
-        this.evaluacionRepository = evaluacionRepository;
-    }
-
-    public static int getContador() {
-        return contador;
-    }
-
-    public static void setContador(int contador) {
-        Evaluacion.contador = contador;
+        this.maximumNote = maximumNote;
+        this.minimumNote = minimumNote;
+        this.averageGrade = averageGrade;
+        this.passPercentages = passPercentages;
+        this.failPercentages = failPercentages;
+        this.evaluationTestRepository = evaluationTestRepository;
     }
 
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public float getMaximumNote() {
+        return maximumNote;
     }
 
-    public float getNotaMaxima() {
-        return notaMaxima;
+    public void setMaximumNote(float maximumNote) {
+        this.maximumNote = maximumNote;
     }
 
-    public void setNotaMaxima(float notaMaxima) {
-        this.notaMaxima = notaMaxima;
+    public float getMinimumNote() {
+        return minimumNote;
     }
 
-    public float getNotaMinima() {
-        return notaMinima;
+    public void setMinimumNote(float minimumNote) {
+        this.minimumNote = minimumNote;
     }
 
-    public void setNotaMinima(float notaMinima) {
-        this.notaMinima = notaMinima;
+    public float getAverageGrade() {
+        return averageGrade;
     }
 
-    public float getNotaMedia() {
-        return notaMedia;
+    public void setAverageGrade(float averageGrade) {
+        this.averageGrade = averageGrade;
     }
 
-    public void setNotaMedia(float notaMedia) {
-        this.notaMedia = notaMedia;
+    public float getPassPercentages() {
+        return passPercentages;
     }
 
-    public float getPorcentajeAprobado() {
-        return porcentajeAprobado;
+    public void setPassPercentages(float passPercentages) {
+        this.passPercentages = passPercentages;
     }
 
-    public void setPorcentajeAprobado(float porcentajeAprobado) {
-        this.porcentajeAprobado = porcentajeAprobado;
+    public float getFailPercentages() {
+        return failPercentages;
     }
 
-    public float getPorcentajeSuspenso() {
-        return porcentajeSuspenso;
+    public void setFailPercentages(float failPercentages) {
+        this.failPercentages = failPercentages;
     }
 
-    public void setPorcentajeSuspenso(float porcentajeSuspenso) {
-        this.porcentajeSuspenso = porcentajeSuspenso;
+    public IEvaluacionRepository<PruebasEvaluacion> getEvaluationTestRepository() {
+        return evaluationTestRepository;
     }
 
+    public void setEvaluationTestRepository(PruebaEvaluacionRepository evaluationTestRepository) {
+        this.evaluationTestRepository = evaluationTestRepository;
+    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Evaluacion that = (Evaluacion) o;
-        return id == that.id && Float.compare(that.notaMaxima, notaMaxima) == 0 && Float.compare(that.notaMinima, notaMinima) == 0 && Float.compare(that.notaMedia, notaMedia) == 0 && Float.compare(that.porcentajeAprobado, porcentajeAprobado) == 0 && Float.compare(that.porcentajeSuspenso, porcentajeSuspenso) == 0 && Objects.equals(evaluacionRepository, that.evaluacionRepository);
+        return id == that.id && Float.compare(that.maximumNote, maximumNote) == 0 && Float.compare(that.minimumNote, minimumNote) == 0 && Float.compare(that.averageGrade, averageGrade) == 0 && Float.compare(that.passPercentages, passPercentages) == 0 && Float.compare(that.failPercentages, failPercentages) == 0 && Objects.equals(evaluationTestRepository, that.evaluationTestRepository);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, notaMaxima, notaMinima, notaMedia, porcentajeAprobado, porcentajeSuspenso, evaluacionRepository);
+        return Objects.hash(id, maximumNote, minimumNote, averageGrade, passPercentages, failPercentages, evaluationTestRepository);
     }
 
 
@@ -124,12 +108,12 @@ public class Evaluacion {
     public String toString() {
         return "Evaluacion{" +
                 "id: " + id +
-                ", NotaMaxima: " + notaMaxima +
-                ", NotaMinima: " + notaMinima +
-                ", NotaMedia: " + notaMedia +
-                ", PorcentajeAprobado: " + porcentajeAprobado +
-                ", PorcentajeSuspenso:" + porcentajeSuspenso +
-                ", EvaluacionRepository: " + evaluacionRepository +
+                ", maximumNote: " + maximumNote +
+                ", minimumNote: " + minimumNote +
+                ", averageGrade: " + averageGrade +
+                ", passPercentages: " + passPercentages +
+                ", failPercentages:" + failPercentages +
+                ", evaluationTestRepository: " + evaluationTestRepository +
                 '}';
     }
 }

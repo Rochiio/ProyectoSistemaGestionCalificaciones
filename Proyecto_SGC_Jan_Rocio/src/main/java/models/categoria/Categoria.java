@@ -6,42 +6,31 @@ public class Categoria {
     //Atributo de la clase.
     private static int contador = 0;
     private int id;
-    private String nombre;
+    private String name;
 
 
     /**
      * Constructor de categoría
-     * @param nombre de la categoría.
+     * @param name de la categoría.
      */
-    public Categoria(String nombre) {
+    public Categoria(String name) {
         this.id = ++contador;
-        this.nombre = nombre;
+        this.name = name;
     }
 
 
     //-----------------------------Getter and Setter------------------------------------//
-    public static int getContador() {
-        return contador;
-    }
-
-    public static void setContador(int contador) {
-        Categoria.contador = contador;
-    }
 
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public String getName() {
+        return this.name;
     }
 
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setName(String nombre) {
+        this.name = nombre;
     }
 
 
@@ -52,12 +41,12 @@ public class Categoria {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Categoria categoria = (Categoria) o;
-        return id == categoria.id && Objects.equals(nombre, categoria.nombre);
+        return id == categoria.id && Objects.equals(name, categoria.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, nombre);
+        return Objects.hash(id, name);
     }
 
 
@@ -65,7 +54,7 @@ public class Categoria {
     public String toString() {
         return "Categoria{" +
                 "id=" + id +
-                ", nombre='" + nombre + '\'' +
+                ", name='" + name + '\'' +
                 '}';
     }
 }

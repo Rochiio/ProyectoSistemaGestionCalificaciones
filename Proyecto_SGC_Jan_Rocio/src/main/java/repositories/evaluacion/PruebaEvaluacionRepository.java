@@ -1,16 +1,17 @@
 package repositories.evaluacion;
 
 import com.diogonunes.jcolor.Attribute;
-import exceptions.evaluacionException;
-import models.evaluacion.Evaluacion;
+import exceptions.EvaluacionException;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.diogonunes.jcolor.Ansi.colorize;
 
-public class EvaluacionRepository implements ICRUDEvaluacionRepository<Evaluacion> {
-    public final Map<Integer, Evaluacion>  evaluaciones = new HashMap<>();
+public class PruebaEvaluacionRepository implements IEvaluacionRepository<PruebasEvaluacion> {
+    public final Map<Integer, PruebasEvaluacion>  evaluaciones = new HashMap<>();
 
     /**
      * Crea una evaluación
@@ -18,7 +19,7 @@ public class EvaluacionRepository implements ICRUDEvaluacionRepository<Evaluacio
      * @return Devuelve la evaluación que se ha añadido.
      */
     @Override
-    public Evaluacion save(Evaluacion eva) {
+    public PruebasEvaluacion save(PruebasEvaluacion eva) {
         this.evaluaciones.put(eva.getId(), eva);
         return this.evaluaciones.get(eva.getId());
     }
@@ -29,15 +30,15 @@ public class EvaluacionRepository implements ICRUDEvaluacionRepository<Evaluacio
      * @return devuelve las evaluaciones
      */
     @Override
-    public Evaluacion findAll() {
-        return (Evaluacion) this.evaluaciones.values();
+    public List<PruebasEvaluacion> findAll() {
+        return new ArrayList<>(this.evaluaciones.values());
     }
 
 
 
 
     @Override
-    public Evaluacion create(Evaluacion eva) {
+    public PruebasEvaluacion create(PruebasEvaluacion eva) {
         this.evaluaciones.put(eva.getId(), eva);
         return this.evaluaciones.get(eva.getId());
     }
@@ -47,16 +48,16 @@ public class EvaluacionRepository implements ICRUDEvaluacionRepository<Evaluacio
      * Eliminar una evaluación
      * @param eva que deseas eliminar.
      * @return Devuelve la evaluación eliminada.
-     * @throws evaluacionException si la evaluación no existe.
+     * @throws EvaluacionException si la evaluación no existe.
      */
     @Override
-    public Evaluacion delete(Evaluacion eva) throws evaluacionException {
+    public PruebasEvaluacion delete(PruebasEvaluacion eva) throws EvaluacionException {
         var existe = findById(eva.getId());
         if (existe != null){
             this.evaluaciones.remove(eva.getId());
             return eva;
         }
-        throw new evaluacionException(colorize("La evaluación que deseas eliminar no existe..", Attribute.RED_TEXT()));
+        throw new EvaluacionException(colorize("La evaluación que deseas eliminar no existe..", Attribute.RED_TEXT()));
     }
 
 
@@ -65,7 +66,7 @@ public class EvaluacionRepository implements ICRUDEvaluacionRepository<Evaluacio
      * @param id de la evaluación a buscar.
      * @return Devuelve la evaluación buscada, null si no existe.
      */
-    private Evaluacion findById(int id) {
+    private PruebasEvaluacion findById(int id) {
         for (var eva : evaluaciones.values()) {
             if (eva.getId() == id) {
                 return eva;

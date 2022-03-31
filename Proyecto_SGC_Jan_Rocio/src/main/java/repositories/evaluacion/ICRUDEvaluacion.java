@@ -1,29 +1,12 @@
 package repositories.evaluacion;
 
-import exceptions.evaluacionException;
+import exceptions.EvaluacionException;
 
 public interface ICRUDEvaluacion<T> {
+    T create(T item);
 
-    /**
-     * Devuelve todas la evaluaciones
-     * @return Todos las evaluaciones
-     */
-    T findAll();
-
-    /**
-     * crear una evaluación
-     * @param item evaluación a crear.
-     * @return evaluación creada
-     */
-    T save (T item);
-
-    /**
-     * Eliminar una evaluación
-     * @param item
-     * @return
-     * @throws evaluacionException
-     */
-    T delete(T item) throws evaluacionException;
+    T delete(T id) throws EvaluacionException;
 
 
 }
+
