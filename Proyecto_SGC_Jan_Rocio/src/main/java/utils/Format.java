@@ -13,10 +13,9 @@ public class Format {
      * @param date fecha a parsear.
      * @return String de fecha formateado.
      */
-    public static String formatDateOne(LocalDateTime date) throws ParseException {
+    public static String formatDateShort(LocalDateTime date) throws ParseException {
         final Locale locale = new Locale("es", "ES");
-        String pattern = "dd/MM/yyyy";
         return date.format(DateTimeFormatter
-                .ofLocalizedDate(FormatStyle.valueOf(pattern)).withLocale(locale));
+                .ofLocalizedDate(FormatStyle.SHORT).withLocale(locale));
     }
 }

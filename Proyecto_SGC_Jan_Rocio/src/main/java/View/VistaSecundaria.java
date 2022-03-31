@@ -26,8 +26,6 @@ public class VistaSecundaria {
                         Inputs.inputWithRegex("[a-zA-Z,0-9]+[@][a-zA-Z,0-9]+[.][a-z]+","Dime el email del alumno"),
                         Inputs.inputWithRegex("[0-9]{3}[-][0-9]{6}","Dime el número de teléfono del alumno [NNN-NNNNNN]"),
                         (Inputs.inputWithRegex("^[0-1,$]$", "Tiene evaluación continua 1.Si 0.No").equals("1")),
-                        Format.formatDate(Inputs.inputWithRegex("^([0-2][0-9]|3[0-1])(\\/|-)(0[1-9]|1[0-2])\\2(\\d{4})$",
-                                "Dime la fecha de matriculación del alumno"))
                   );
 
                   var mostrar = studentController.add(newStudent);
@@ -55,4 +53,116 @@ public class VistaSecundaria {
             }
         System.out.println("Alumno eliminado: "+ mostrar);
     }
+
+
+    /**
+     * Mostrar todos los alumnos.
+     */
+    public void showAllStudents() {
+        var option = Inputs.inputWithRegex("[1-2,$]$","Cómo quieres que se muestren\n -1.Orden lista\n -2.Orden Alfabético");
+        try {
+            var show = studentController.showAllStudents();
+                if (option.equals("1")){
+                    show.sort(new AlumnoOrdenListaComparator());
+                }else{
+                    show.sort(new AlumnoOrdenAlfabeticoComparator());
+                }
+
+            for (Alumno alumno: show) {
+                System.out.println(alumno);
+            }
+
+        } catch (AlumnoException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+
+    /**
+     * Modificar datos alumno.
+     * TODO revisar, encontrar la expresion regular correcta
+     */
+    public void modifyStudent() {
+        var id = Integer.parseInt(Inputs.inputWithRegex("[0-9]*","Dime el id del alumno a modificar"));
+        var modify = new Alumno(
+                Inputs.inputStrings("Dime el DNi del alumno [NNNNNNNNL]"),
+                Inputs.inputStrings("Dime el nombre del alumno"),
+                Inputs.inputStrings("Dime los apellidos del alumno"),
+                Inputs.inputStrings("Dime el email del alumno"),
+                Inputs.inputStrings("Dime el número de teléfono del alumno [NNN-NNNNNN]"),
+                (Inputs.inputStrings( "Tiene evaluación continua 1.Si 0.No").equals("1"))
+        );
+
+            try {
+                var returnStudent = studentController.modifyStudent(id,modify);
+                System.out.println("Modificado: " +returnStudent);
+            } catch (AlumnoException e) {
+                System.out.println(e.getMessage());
+            }
+    }
+
+
+    /**
+     * Añadir categoría.
+     */
+    public void addCategory() {
+        Categoria newCategoria = new Categoria(
+                Inputs.inputWithRegex("[a-zA-Z]*","Dime el nombre de la nueva categoría")
+        );
+            try{
+                var show = categoryController.addCategory(newCategoria);
+                System.out.println("Categoría añadida: " +show.toString());
+            } catch (CategoriaException e) {
+                System.out.println(e.getMessage());
+            }
+    }
+
+
+    /**
+     * Modificar categoría.
+     */
+    public void modifyCategory() {
+        var id = Integer.parseInt(Inputs.inputWithRegex("[0-9]*","Dime el id de la categoría a modificar"));
+            var newName = Inputs.inputStrings("Dime el nombre de la nueva categoría");
+
+                try {
+                    var returnCategory = categoryController.modifyCategory(id,newName);
+                    System.out.println("Categoría modificada: " + returnCategory.toString());
+                } catch (CategoriaException e) {
+                    System.out.println(e.getMessage());
+                }
+    }
+
+
+    /**
+     * Mostrar una categoría.
+     */
+    public void showCategory() {
+        var numberIdCategory = Integer.parseInt(Inputs.inputWithRegex("[0-9]*","Dime el id de la categoría a mostrar"));
+        Categoria show;
+            try {
+                show = categoryController.showCategory(numberIdCategory);
+                System.out.println(show.toString());
+            } catch (CategoriaException e) {
+                System.out.println(e.getMessage());
+            }
+    }
+
+
+    /**
+     * Mostrar todas las categorías.
+     */
+    public void showAllCategories() {
+        try {
+            var show = categoryController.showAllCategories();
+
+                for (Categoria category: show) {
+                    System.out.println(category.toString());
+                }
+
+        } catch (CategoriaException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
 }
