@@ -61,6 +61,21 @@ public class VistaSecundaria {
 
 
     /**
+     * Mostrar un estudiante.
+     */
+    public void showStudent() {
+        var numberIdStudent = Integer.parseInt(Inputs.inputWithRegex("[0-9]*","Dime el id del alumno a mostrar"));
+        Alumno show;
+            try {
+                show = studentController.showStudent(numberIdStudent);
+                System.out.println(show.toString());
+            } catch (AlumnoException e) {
+                System.out.println(e.getMessage());
+            }
+    }
+
+
+    /**
      * Mostrar todos los alumnos.
      */
     public void showAllStudents() {
@@ -169,5 +184,6 @@ public class VistaSecundaria {
             System.out.println(e.getMessage());
         }
     }
+
 
 }
