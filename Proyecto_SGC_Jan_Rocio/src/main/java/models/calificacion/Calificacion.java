@@ -9,21 +9,21 @@ public class Calificacion {
     //Declaración de los atributos de la clase.
     private static int contador = 0;
     private int id;
-    private Alumno alumno;
-    private float nota;
+    private Alumno student;
+    private float note;
     private Date createdAt;
 
 
     /**
      * Constructor de calificaciones
      * @param alumno el alumno.
-     * @param nota nota del alumno.
+     * @param note nota del alumno.
      * @param localDateTime fecha de entrega de las notas.
      */
-    public Calificacion(Alumno alumno, float nota, Date localDateTime) {
+    public Calificacion(Alumno alumno, float note, Date localDateTime) {
         this.id = ++contador;
-        this.alumno = alumno;
-        this.nota = nota;
+        this.student = alumno;
+        this.note = note;
         this.createdAt = localDateTime;
     }
 
@@ -46,20 +46,20 @@ public class Calificacion {
         this.id = id;
     }
 
-    public Alumno getAlumno() {
-        return alumno;
+    public Alumno getStudent() {
+        return student;
     }
 
-    public void setAlumno(Alumno alumno) {
-        this.alumno = alumno;
+    public void setStudent(Alumno student) {
+        this.student = student;
     }
 
     public float getNota() {
-        return nota;
+        return note;
     }
 
     public void setNota(float nota) {
-        this.nota = nota;
+        this.note = nota;
     }
 
     public Date getCreatedAt() {
@@ -82,12 +82,12 @@ public class Calificacion {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Calificacion that = (Calificacion) o;
-        return id == that.id && Float.compare(that.nota, nota) == 0 && Objects.equals(alumno, that.alumno) && Objects.equals(createdAt, that.createdAt);
+        return id == that.id && Float.compare(that.note, note) == 0 && Objects.equals(student, that.student) && Objects.equals(createdAt, that.createdAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, alumno, nota, createdAt);
+        return Objects.hash(id, student, note, createdAt);
     }
 
 
@@ -95,8 +95,8 @@ public class Calificacion {
     public String toString() {
         return "Calificacion{" +
                 "id=" + id +
-                ", alumno=" + alumno +
-                ", nota=" + nota +
+                ", alumno=" + student +
+                ", nota=" + note +
                 ", localDateTime=" + createdAt +
                 '}';
     }

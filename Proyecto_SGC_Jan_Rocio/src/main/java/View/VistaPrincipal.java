@@ -67,13 +67,13 @@ public class VistaPrincipal {
      */
     private void switchCategoryMenu(int option) {
         switch (option) {
-            case 1: secondaryView.addCategory();
+            case 1: //secondaryView.addCategory();
                 break;
-            case 2: secondaryView.modifyCategory();
+            case 2: //secondaryView.modifyCategory();
                 break;
-            case 3: secondaryView.showCategory();
+            case 3: //secondaryView.showCategory();
                 break;
-            case 4: secondaryView.showAllCategories();
+            case 4: //secondaryView.showAllCategories();
                 break;
             case 0: System.out.println(colorize("Cerrando el gestor de categorías ....",Attribute.GREEN_BACK()));
                 break;
@@ -103,11 +103,11 @@ public class VistaPrincipal {
                 break;
             case 2: secondaryView.deleteStudent();
                 break;
-            case 3: secondaryView.modifyStudent();
+            case 3: //secondaryView.modifyStudent();
                 break;
-            case 4: secondaryView.showStudent();
+            case 4: //secondaryView.showStudent();
                 break;
-            case 5: secondaryView.showAllStudents();
+            case 5: //secondaryView.showAllStudents();
                 break;
             case 0: System.out.println(colorize("Cerrando el gestor de alumnos ....",Attribute.GREEN_BACK()));
                  break;

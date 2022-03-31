@@ -2,6 +2,7 @@ package utils;
 
 import com.diogonunes.jcolor.Attribute;
 
+import java.time.LocalDateTime;
 import java.util.Scanner;
 
 import static com.diogonunes.jcolor.Ansi.colorize;
@@ -15,7 +16,7 @@ public class Inputs {
      * @param sentence frase sobre lo que se necesita.
      * @return lo que ha escrito el usuario.
      */
-    public static String inputWithRegex(String regex,String sentence){
+    public static LocalDateTime inputWithRegex(String regex, String sentence){
         String option;
             do {
                 System.out.println(colorize(sentence, Attribute.CYAN_TEXT()));

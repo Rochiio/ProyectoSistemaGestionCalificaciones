@@ -36,7 +36,6 @@ public class Alumno {
         this.registrationDate = registrationDate;
     }
 
-
     //------------------------------------------Getters & Setters-----------------------------------------------
     public String getDni() {
         return dni;

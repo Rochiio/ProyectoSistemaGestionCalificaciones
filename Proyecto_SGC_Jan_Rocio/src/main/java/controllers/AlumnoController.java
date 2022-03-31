@@ -91,7 +91,7 @@ public class AlumnoController {
      * @param id id del alumno.
      * @param modify nuevos datos.
      * @return el alumno modificado.
-     * @throws AlumnoException si no eiste un alumno con ese id.
+     * @throws AlumnoException si no existe un alumno con ese id.
      */
     public Alumno modifyStudent(int id, Alumno modify) throws AlumnoException {
         Alumno returnStudent;
