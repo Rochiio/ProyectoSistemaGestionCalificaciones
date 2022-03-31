@@ -9,20 +9,20 @@ public class Calificacion {
     //Declaración de los atributos de la clase.
     private static int contador = 0;
     private int id;
-    private Alumno alumno;
+    private Alumno student;
     private float nota;
     private Date createdAt;
 
 
     /**
      * Constructor de calificaciones
-     * @param alumno el alumno.
-     * @param nota nota del alumno.
+     * @param student el student.
+     * @param nota nota del student.
      * @param localDateTime fecha de entrega de las notas.
      */
-    public Calificacion(Alumno alumno, float nota, Date localDateTime) {
+    public Calificacion(Alumno student, float nota, Date localDateTime) {
         this.id = ++contador;
-        this.alumno = alumno;
+        this.student = student;
         this.nota = nota;
         this.createdAt = localDateTime;
     }
@@ -46,12 +46,12 @@ public class Calificacion {
         this.id = id;
     }
 
-    public Alumno getAlumno() {
-        return alumno;
+    public Alumno getStudent() {
+        return student;
     }
 
-    public void setAlumno(Alumno alumno) {
-        this.alumno = alumno;
+    public void getStudent(Alumno alumno) {
+        this.student = alumno;
     }
 
     public float getNota() {
@@ -82,12 +82,12 @@ public class Calificacion {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Calificacion that = (Calificacion) o;
-        return id == that.id && Float.compare(that.nota, nota) == 0 && Objects.equals(alumno, that.alumno) && Objects.equals(createdAt, that.createdAt);
+        return id == that.id && Float.compare(that.nota, nota) == 0 && Objects.equals(student, that.student) && Objects.equals(createdAt, that.createdAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, alumno, nota, createdAt);
+        return Objects.hash(id, student, nota, createdAt);
     }
 
 
@@ -95,7 +95,7 @@ public class Calificacion {
     public String toString() {
         return "Calificacion{" +
                 "id=" + id +
-                ", alumno=" + alumno +
+                ", student=" + student +
                 ", nota=" + nota +
                 ", localDateTime=" + createdAt +
                 '}';
