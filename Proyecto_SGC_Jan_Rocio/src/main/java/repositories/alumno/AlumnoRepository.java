@@ -91,18 +91,14 @@ public class AlumnoRepository implements IAlumnoRepository<Alumno> {
      * @return el alumno actualizado.
      */
     @Override
-    public Alumno update(int id, Alumno value) throws AlumnoException {
+    public Alumno update(int id, Alumno value) {
         var beforeData = this.lista.get(id);
-            if (value.getDni().isEmpty()|| value.getDni().equals(beforeData.getDni())){
                 this.lista.get(id).setDni(value.getDni());
                 this.lista.get(id).setName((value.getName().isEmpty())? beforeData.getName(): value.getName());
                 this.lista.get(id).setLastName((value.getLastName().isEmpty())? beforeData.getLastName(): value.getLastName());
                 this.lista.get(id).setEmail((value.getEmail().isEmpty())? beforeData.getEmail(): value.getEmail());
                 this.lista.get(id).setTelephone((value.getTelephone().isEmpty())? beforeData.getTelephone(): value.getTelephone());
                 this.lista.get(id).setContinuousEvaluation(value.isContinuousEvaluation());
-            }else{
-                throw new AlumnoException("No puedes modificar el DNI de un alumno por el de otro");
-            }
         return this.lista.get(id);
     }
 
