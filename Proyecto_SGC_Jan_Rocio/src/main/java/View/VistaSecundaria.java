@@ -1,29 +1,16 @@
 package View;
 
-import compares.AlumnoOrdenAlfabeticoComparator;
-import compares.AlumnoOrdenListaComparator;
 import controllers.AlumnoController;
-import controllers.CategoriaController;
 import exceptions.AlumnoException;
-import exceptions.CategoriaException;
 import models.alumno.Alumno;
-
-import models.categoria.Categoria;
+import repositories.alumno.AlumnoRepository;
+import utils.Format;
 import utils.Inputs;
 
+import java.text.ParseException;
 
 public class VistaSecundaria {
-    private final AlumnoController studentController;
-    private final CategoriaController categoryController;
-
-    /**
-     * Constructor
-     * @param studentController Controlador de alumnos.
-     */
-    public VistaSecundaria(AlumnoController studentController,CategoriaController categoryController) {
-        this.studentController=studentController;
-        this.categoryController = categoryController;
-    }
+    private final AlumnoController studentController=new AlumnoController(new AlumnoRepository());
 
 
     /**
@@ -38,12 +25,14 @@ public class VistaSecundaria {
                         Inputs.inputWithRegex("[A-Z][a-z]*[ ][A-Z][a-z]*","Dime los apellidos del alumno"),
                         Inputs.inputWithRegex("[a-zA-Z,0-9]+[@][a-zA-Z,0-9]+[.][a-z]+","Dime el email del alumno"),
                         Inputs.inputWithRegex("[0-9]{3}[-][0-9]{6}","Dime el número de teléfono del alumno [NNN-NNNNNN]"),
-                        (Inputs.inputWithRegex("^[0-1,$]$", "Tiene evaluación continua 1.Si 0.No").equals("1"))
+                        (Inputs.inputWithRegex("^[0-1,$]$", "Tiene evaluación continua 1.Si 0.No").equals("1")),
                   );
 
                   var mostrar = studentController.add(newStudent);
-                  System.out.println("Alumno añadido: " +mostrar.toString());
+                  System.out.println("Alumno añadido: " +mostrar);
 
+            } catch (ParseException e) {
+                System.out.println("Error: Fecha incorrecta");
             } catch (AlumnoException e) {
                 System.out.println(e.getMessage());
             }
@@ -52,31 +41,17 @@ public class VistaSecundaria {
 
     /**
      * Eliminar alumno.
+     * TODO añadirle que no esté en la evaluacion para poderlo eliminar.
      */
     public void deleteStudent() {
         var numberStudent = Inputs.inputWithRegex("[0-9]*","Dime el id del alumno a eliminar");
-        Alumno show;
+        Alumno mostrar = null;
             try {
-                show = studentController.delete(Integer.parseInt(numberStudent));
-                System.out.println("Alumno eliminado: "+ show.toString());
+                mostrar = studentController.delete(Integer.parseInt(numberStudent));
             } catch (AlumnoException e) {
-                System.out.println(e.getMessage());
+                e.printStackTrace();
             }
-    }
-
-
-    /**
-     * Mostrar un alumno.
-     */
-    public void showStudent() {
-        var numberIdStudent = Integer.parseInt(Inputs.inputWithRegex("[0-9]*","Dime el id del alumno a mostrar"));
-        Alumno show;
-            try {
-                show = studentController.showStudent(numberIdStudent);
-                System.out.println(show.toString());
-            } catch (AlumnoException e) {
-                System.out.println(e.getMessage());
-            }
+        System.out.println("Alumno eliminado: "+ mostrar);
     }
 
 
@@ -136,7 +111,7 @@ public class VistaSecundaria {
         );
             try{
                 var show = categoryController.addCategory(newCategoria);
-                System.out.println("Categoría añadida: " +show);
+                System.out.println("Categoría añadida: " +show.toString());
             } catch (CategoriaException e) {
                 System.out.println(e.getMessage());
             }
@@ -190,11 +165,4 @@ public class VistaSecundaria {
         }
     }
 
-
-
-
-
-
-
 }
-
