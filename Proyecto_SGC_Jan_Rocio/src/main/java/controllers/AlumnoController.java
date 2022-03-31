@@ -98,7 +98,7 @@ public class AlumnoController {
         var exist = studentRepository.findById(id);
             if (exist != null) {
                 var newDniOkey = studentRepository.findByDni(modify.getDni());
-                    if (newDniOkey == null) {
+                    if (newDniOkey == null || newDniOkey.getId()==exist.getId()) {
                         returnStudent = studentRepository.update(id, modify);
                     } else{
                         throw new AlumnoException("Ya existe un alumno con este dni");
