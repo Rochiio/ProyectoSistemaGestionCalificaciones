@@ -1,6 +1,5 @@
 package repositories.alumno;
 
-import exceptions.AlumnoException;
 import models.alumno.Alumno;
 
 
@@ -93,7 +92,7 @@ public class AlumnoRepository implements IAlumnoRepository<Alumno> {
     @Override
     public Alumno update(int id, Alumno value) {
         var beforeData = this.lista.get(id);
-                this.lista.get(id).setDni(value.getDni());
+                this.lista.get(id).setDni((value.getDni().isEmpty())? beforeData.getDni() : value.getDni());
                 this.lista.get(id).setName((value.getName().isEmpty())? beforeData.getName(): value.getName());
                 this.lista.get(id).setLastName((value.getLastName().isEmpty())? beforeData.getLastName(): value.getLastName());
                 this.lista.get(id).setEmail((value.getEmail().isEmpty())? beforeData.getEmail(): value.getEmail());
