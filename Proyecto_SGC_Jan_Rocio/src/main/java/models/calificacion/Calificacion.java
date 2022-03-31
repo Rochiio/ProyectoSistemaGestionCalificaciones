@@ -1,8 +1,7 @@
-package models.calificaciones;
+package models.calificacion;
 
 import models.alumno.Alumno;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Objects;
 

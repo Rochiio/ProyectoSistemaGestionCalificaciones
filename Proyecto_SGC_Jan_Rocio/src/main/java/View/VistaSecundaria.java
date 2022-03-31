@@ -10,7 +10,7 @@ import utils.Inputs;
 import java.text.ParseException;
 
 public class VistaSecundaria {
-    private final AlumnoController studentController = new AlumnoController(new AlumnoRepository());
+    private final AlumnoController studentController=new AlumnoController(new AlumnoRepository());
 
 
     /**
