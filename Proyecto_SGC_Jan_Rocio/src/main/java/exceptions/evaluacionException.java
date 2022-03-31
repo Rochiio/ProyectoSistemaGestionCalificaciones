@@ -1,15 +1,13 @@
 package exceptions;
 
-import com.diogonunes.jcolor.Attribute;
-
-import static com.diogonunes.jcolor.Ansi.colorize;
-
 public class EvaluacionException extends Exception {
+
+
     /**
-     * Exception de evaluación
-     * @param message mensaje que queremos devolver de la exception
+     * Exception de la evaluación
+     * @param mensaje que se muestra al saltar la exception controlada.
      */
-    public EvaluacionException(String message){
-        super(colorize(message, Attribute.RED_TEXT()));
+    public EvaluacionException (String mensaje){
+        super();
     }
 }
