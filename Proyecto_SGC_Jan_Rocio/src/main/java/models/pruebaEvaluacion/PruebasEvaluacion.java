@@ -1,16 +1,20 @@
 package models.pruebaEvaluacion;
 
+import models.calificacion.Calificacion;
 import models.categoria.Categoria;
 import repositories.calificaciones.CalificacionRepository;
+import repositories.calificaciones.ICalificacionRepository;
+import utils.Format;
 
-import java.util.Date;
+import java.text.ParseException;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class PruebasEvaluacion {
     //Declaración de los atributos de la clase
     private static int contador = 0;
-    private int id;
-    private Date date;
+    private final int id;
+    private final LocalDateTime date;
     private String descripcion;
     private float maximumNote;
     private float minimumNote;
@@ -18,10 +22,10 @@ public class PruebasEvaluacion {
     private float passPercentages;
     private float failPercentages;
     private Categoria category;
-    private CalificacionRepository calificacionRepository;
+    private ICalificacionRepository<Calificacion> calificacionRepository;
 
 
-    public PruebasEvaluacion(Date date, String descripcion, float maximumNote, float minimumNote,
+    public PruebasEvaluacion(LocalDateTime date, String descripcion, float maximumNote, float minimumNote,
                              float averageGrade, float passPercentages, float failPercentages, Categoria category,
                              CalificacionRepository calificacionRepository) {
         this.id = ++contador;
@@ -36,28 +40,13 @@ public class PruebasEvaluacion {
         this.calificacionRepository = calificacionRepository;
     }
 
-    public static int getContador() {
-        return contador;
-    }
-
-    public static void setContador(int contador) {
-        PruebasEvaluacion.contador = contador;
-    }
 
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
+    public String getDate() throws ParseException {
+        return Format.formatDateMedium(date);
     }
 
     public String getDescripcion() {
@@ -116,7 +105,7 @@ public class PruebasEvaluacion {
         this.category = category;
     }
 
-    public CalificacionRepository getCalificacionRepository() {
+    public ICalificacionRepository getCalificacionRepository() {
         return calificacionRepository;
     }
 
@@ -127,18 +116,24 @@ public class PruebasEvaluacion {
 
     @Override
     public String toString() {
-        return "PruebasEvaluacion{" +
-                "id=" + id +
-                ", date=" + date +
-                ", descripcion='" + descripcion + '\'' +
-                ", maximumNote=" + maximumNote +
-                ", minimumNote=" + minimumNote +
-                ", averageGrade=" + averageGrade +
-                ", passPercentages=" + passPercentages +
-                ", failPercentages=" + failPercentages +
-                ", categoriaRepository=" + category +
-                ", calificacionRepository=" + calificacionRepository +
-                '}';
+    String result = "";
+            try {
+                result= "PruebasEvaluacion{" +
+                        "id=" + id +
+                        ", date=" + Format.formatDateMedium(date) +
+                        ", descripcion='" + descripcion + '\'' +
+                        ", maximumNote=" + maximumNote +
+                        ", minimumNote=" + minimumNote +
+                        ", averageGrade=" + averageGrade +
+                        ", passPercentages=" + passPercentages +
+                        ", failPercentages=" + failPercentages +
+                        ", categoriaRepository=" + category +
+                        ", calificacionRepository=" + calificacionRepository +
+                        '}';
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        return result;
     }
 
     @Override
