@@ -1,8 +1,6 @@
 package controllers;
 
-import exceptions.AlumnoException;
 import exceptions.CategoriaException;
-import models.alumno.Alumno;
 import models.categoria.Categoria;
 
 import repositories.categoria.ICategoriaRepository;

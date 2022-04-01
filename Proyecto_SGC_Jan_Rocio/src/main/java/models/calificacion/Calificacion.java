@@ -30,27 +30,15 @@ public class Calificacion {
 
     //-----------------------------Getter and Setter------------------------------------//
 
-    public static int getContador() {
-        return contador;
-    }
-
-    public static void setContador(int contador) {
-        Calificacion.contador = contador;
-    }
-
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public Alumno getStudent() {
         return student;
     }
 
-    public void getStudent(Alumno alumno) {
+    public void setStudent(Alumno alumno) {
         this.student = alumno;
     }
 
