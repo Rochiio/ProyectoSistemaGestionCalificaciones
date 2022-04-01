@@ -73,5 +73,21 @@ public class Menu {
 
 
 
+    public static int assessmentScreen(){
+        String regex="^[0-3,$]$";
+        String option;
+        do {
+            System.out.println(colorize("\nElige una opción", Attribute.TEXT_COLOR(200)));
+            System.out.println(" -1 Mostrar evalución \n" +
+                    " -2 Crear evaluación \n" +
+                    " -3 Eliminar evaluación \n" +
+                    " -0 Salir");
+            option=in.nextLine();
+        }while(!option.matches(regex));
+        return Integer.parseInt(option);
+    }
+
+
+
 
 }
