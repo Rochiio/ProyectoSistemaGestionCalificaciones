@@ -1,16 +1,17 @@
 package models.pruebaEvaluacion;
 
+import models.calificacion.Calificacion;
 import models.categoria.Categoria;
 import repositories.calificaciones.CalificacionRepository;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class PruebasEvaluacion {
     //Declaración de los atributos de la clase
     private static int contador = 0;
     private int id;
-    private Date date;
+    private LocalDateTime date;
     private String descripcion;
     private float maximumNote;
     private float minimumNote;
@@ -18,23 +19,28 @@ public class PruebasEvaluacion {
     private float passPercentages;
     private float failPercentages;
     private Categoria category;
-    private CalificacionRepository calificacionRepository;
+    private CalificacionRepository<Calificacion> calificacionRepository;
 
 
-    public PruebasEvaluacion(Date date, String descripcion, float maximumNote, float minimumNote,
-                             float averageGrade, float passPercentages, float failPercentages, Categoria category,
-                             CalificacionRepository calificacionRepository) {
+    public PruebasEvaluacion() {
         this.id = ++contador;
-        this.date = date;
+    }
+
+    public PruebasEvaluacion(String descripcion, Categoria category, CalificacionRepository<Calificacion> calificacionRepository) {
+        this.id = ++contador;
+        this.date = LocalDateTime.now();
         this.descripcion = descripcion;
-        this.maximumNote = maximumNote;
-        this.minimumNote = minimumNote;
-        this.averageGrade = averageGrade;
-        this.passPercentages = passPercentages;
-        this.failPercentages = failPercentages;
+        this.maximumNote = 5.6f;
+        this.minimumNote = 5.0f;
+        this.averageGrade = 5.5f;
+        this.passPercentages = 5.3f;
+        this.failPercentages = 3.3f;
         this.category = category;
         this.calificacionRepository = calificacionRepository;
     }
+
+
+
 
     public static int getContador() {
         return contador;
@@ -48,17 +54,7 @@ public class PruebasEvaluacion {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
 
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
 
     public String getDescripcion() {
         return descripcion;
@@ -116,13 +112,73 @@ public class PruebasEvaluacion {
         this.category = category;
     }
 
-    public CalificacionRepository getCalificacionRepository() {
+    public CalificacionRepository<Calificacion> getCalificacionRepository() {
         return calificacionRepository;
     }
 
-    public void setCalificacionRepository(CalificacionRepository calificacionRepository) {
+    public void setCalificacionRepository(CalificacionRepository<Calificacion> calificacionRepository) {
         this.calificacionRepository = calificacionRepository;
     }
+
+
+    /**
+     * Calcula la nota media
+     * @return Devuelve la nota media
+     */
+    /*private float averageScore(){
+        float score;
+        var todo = this.calificacionRepository.findAll();
+        for (Calificacion calificacion: this.calificacionRepository.findAll()
+             ) {
+
+        }
+    }*/
+
+    //TODO HACER METODO PARA OBJETENER EL MAXIMO
+    private float maximumScore() {
+        return 3.00F;
+    }
+
+
+    //TODO HACER METODO PARA OBJETENER EL minimo
+    private float minimumScore() {
+        return 3.00F;
+    }
+
+
+    /**
+     * Calcula el porcentaje de aprobados
+     * @return Devuelve el porcentaje de aprobados.
+     */
+    private float percentageApproved(){
+        float score = 0;
+        var notas = calificacionRepository.findAll();
+        for (var note: notas) {
+            if (note.getNota() >= 5){
+                score = note.getNota();
+            }
+        }
+        return score;
+    }
+
+    /**
+     * Calcula el procentaje de suspensos.
+     * @return Devuelve el porcentaje de suspensos
+     */
+    private float failureRate(){
+        float score = 0;
+        var notas = calificacionRepository.findAll();
+        for (var note: notas) {
+            if (note.getNota() < 5){
+                score = note.getNota();
+            }
+        }
+        return score;
+    }
+
+
+
+
 
 
     @Override

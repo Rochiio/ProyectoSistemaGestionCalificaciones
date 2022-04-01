@@ -40,6 +40,7 @@ public class Alumno {
     }
 
 
+
     //------------------------------------------Getters & Setters-----------------------------------------------
     public String getDni() {
         return dni;

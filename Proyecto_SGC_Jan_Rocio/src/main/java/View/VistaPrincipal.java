@@ -1,6 +1,7 @@
 package View;
 
 import com.diogonunes.jcolor.Attribute;
+import exceptions.EvaluacionException;
 import utils.Menu;
 
 import static com.diogonunes.jcolor.Ansi.colorize;
@@ -20,7 +21,11 @@ public class VistaPrincipal {
         int option;
         do {
             option = Menu.mainScreen();
-            switchPrincipalMenu(option);
+            try {
+                switchPrincipalMenu(option);
+            } catch (EvaluacionException e) {
+                e.printStackTrace();
+            }
         }while(option != 0);
     }
 
@@ -29,11 +34,11 @@ public class VistaPrincipal {
      * Switch del menu principal.
      * @param option opcion elegida.
      */
-    private void switchPrincipalMenu(int option) {
+    private void switchPrincipalMenu(int option) throws EvaluacionException {
         switch (option){
             case 1: studentManagementMenu();
                 break;
-            case 2:
+            case 2: assessmentManagementMenu();
                 break;
             case 3: categoryManagementMenu();
                 break;
@@ -105,7 +110,7 @@ public class VistaPrincipal {
                 break;
             case 3: secondaryView.modifyStudent();
                 break;
-            case 4: secondaryView.showStudent();
+            case 4: //secondaryView.showStudent();
                 break;
             case 5: secondaryView.showAllStudents();
                 break;
@@ -113,6 +118,46 @@ public class VistaPrincipal {
                  break;
         }
     }
+
+
+
+    //--------------------------------------Evaluación----------------------------------------//
+
+
+    /**
+     * Menú gestión evaluación
+     */
+    private void assessmentManagementMenu() throws EvaluacionException {
+        int option;
+        do {
+            option = Menu.assessmentScreen();
+            assessmentMenu(option);
+        }while(option != 0);
+    }
+
+    /**
+     * Switch del menu de gestión de evaluación.
+     * @param option opción seleccionada.
+     */
+    private void assessmentMenu(int option) throws EvaluacionException {
+        switch (option) {
+            case 1: secondaryView.showEvaluation();
+                break;
+            case 2: secondaryView.createEvaluation();
+                break;
+            case 3: secondaryView.deleteEvaluation();
+                break;
+
+            case 0: System.out.println(colorize("Cerrando el gestor de alumnos ....",Attribute.GREEN_BACK()));
+                break;
+        }
+    }
+
+
+
+
+
+
 
 
 

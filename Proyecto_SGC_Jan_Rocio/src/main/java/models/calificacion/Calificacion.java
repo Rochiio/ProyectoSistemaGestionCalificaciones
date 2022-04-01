@@ -2,6 +2,7 @@ package models.calificacion;
 
 import models.alumno.Alumno;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Objects;
 
@@ -10,23 +11,25 @@ public class Calificacion {
     private static int contador = 0;
     private int id;
     private Alumno student;
-    private float nota;
-    private Date createdAt;
+    private float note;
+    private LocalDateTime createdAt;
 
 
     /**
      * Constructor de calificaciones
-     * @param student el student.
-     * @param nota nota del student.
-     * @param localDateTime fecha de entrega de las notas.
+     * @param student el alumno.
+     * @param note nota del alumno.
      */
-    public Calificacion(Alumno student, float nota, Date localDateTime) {
+    public Calificacion(Alumno student, float note) {
         this.id = ++contador;
         this.student = student;
-        this.nota = nota;
-        this.createdAt = localDateTime;
+        this.note = note;
+        this.createdAt = LocalDateTime.now();
     }
 
+    public Calificacion() {
+        this.id = ++contador;
+    }
 
     //-----------------------------Getter and Setter------------------------------------//
 
@@ -42,32 +45,21 @@ public class Calificacion {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public Alumno getStudent() {
         return student;
     }
 
-    public void getStudent(Alumno alumno) {
-        this.student = alumno;
+    public void setStudent(Alumno student) {
+        this.student = student;
     }
 
     public float getNota() {
-        return nota;
+        return note;
     }
 
     public void setNota(float nota) {
-        this.nota = nota;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
+        this.note = nota;
     }
 
 
@@ -76,18 +68,17 @@ public class Calificacion {
 
 
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Calificacion that = (Calificacion) o;
-        return id == that.id && Float.compare(that.nota, nota) == 0 && Objects.equals(student, that.student) && Objects.equals(createdAt, that.createdAt);
+        return id == that.id && Float.compare(that.note, note) == 0 && Objects.equals(student, that.student) && Objects.equals(createdAt, that.createdAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, student, nota, createdAt);
+        return Objects.hash(id, student, note, createdAt);
     }
 
 
@@ -95,9 +86,11 @@ public class Calificacion {
     public String toString() {
         return "Calificacion{" +
                 "id=" + id +
-                ", student=" + student +
-                ", nota=" + nota +
+                ", alumno=" + student +
+                ", nota=" + note +
                 ", localDateTime=" + createdAt +
                 '}';
     }
+
+
 }

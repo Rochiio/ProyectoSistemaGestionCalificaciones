@@ -1,27 +1,37 @@
 package models.evaluacion;
 
-import repositories.pruebaEvaluacion.IEvaluacionRepository;
 import models.pruebaEvaluacion.PruebasEvaluacion;
+import repositories.pruebaEvaluacion.IPruebaEvaluacionRepository;
 
 import java.util.Objects;
 
 public class Evaluacion {
     //Declaración de los atributos de la clase
-    private IEvaluacionRepository<PruebasEvaluacion> evaluationTestRepository;
+    private static int contador = 0;
+    private int id;
+    private IPruebaEvaluacionRepository<PruebasEvaluacion> evaluationTestRepository;
 
 
-    public Evaluacion(IEvaluacionRepository<PruebasEvaluacion> evaluationTestRepository) {
+    public Evaluacion(IPruebaEvaluacionRepository<PruebasEvaluacion> evaluationTestRepository) {
+        this.id = ++contador;
         this.evaluationTestRepository = evaluationTestRepository;
     }
 
-    public IEvaluacionRepository<PruebasEvaluacion> getEvaluationTestRepository() {
-        return evaluationTestRepository;
+    public IPruebaEvaluacionRepository<PruebasEvaluacion> getEvaluationTestRepository() {
+        return (IPruebaEvaluacionRepository<PruebasEvaluacion>) evaluationTestRepository;
     }
 
-    public void setEvaluationTestRepository(IEvaluacionRepository<PruebasEvaluacion> evaluationTestRepository) {
-        this.evaluationTestRepository = evaluationTestRepository;
+    public void setEvaluationTestRepository(IPruebaEvaluacionRepository<PruebasEvaluacion> evaluationTestRepository) {
+        this.evaluationTestRepository =  evaluationTestRepository;
     }
 
+    public int getContador() {
+        return contador;
+    }
+
+    public int getId() {
+        return id;
+    }
 
 
     @Override
@@ -44,4 +54,6 @@ public class Evaluacion {
                 "evaluationTestRepository=" + evaluationTestRepository +
                 '}';
     }
+
+
 }

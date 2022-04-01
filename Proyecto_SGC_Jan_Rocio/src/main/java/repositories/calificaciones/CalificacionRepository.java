@@ -5,7 +5,7 @@ import models.calificacion.Calificacion;
 
 import java.util.*;
 
-public class CalificacionRepository implements ICalificacionRepository<Calificacion> {
+public class CalificacionRepository<T> implements ICalificacionRepository<Calificacion> {
     private final Map<Integer, Calificacion> qualifications = new HashMap<>();
 
 
@@ -26,7 +26,7 @@ public class CalificacionRepository implements ICalificacionRepository<Calificac
     @Override
     public Calificacion findByAlumno(Calificacion ratings) {
         var exist = findByAlumno(ratings);
-        if (exist.getStudent().equals(ratings.getStudent())){
+        if (exist.getId() == ratings.getId()){
             return exist;
         }
         return null;
@@ -56,7 +56,6 @@ public class CalificacionRepository implements ICalificacionRepository<Calificac
         var exists = findById(id);
         if (exists.getId() == newCalificacion.getId()){
             this.qualifications.get(id).setNota(newCalificacion.getNota());
-            this.qualifications.get(id).setCreatedAt(new Date());
         }else {
             throw new CalificacionException("La calificaciones con ese id no existe.");
         }

@@ -4,11 +4,10 @@ import models.pruebaEvaluacion.PruebasEvaluacion;
 
 import java.util.List;
 
-public interface IEvaluacionRepository<T> extends ICRUDEvaluacion<T> {
+public interface IPruebaEvaluacionRepository<T> extends ICRUDEvaluacion<T> {
 
-    PruebasEvaluacion save(PruebasEvaluacion eva);
-
+    T save(PruebasEvaluacion eva);
     //Devuelve todas las evaluaciones
     List<T> findAll();
-
+    T findById(int id);
 }

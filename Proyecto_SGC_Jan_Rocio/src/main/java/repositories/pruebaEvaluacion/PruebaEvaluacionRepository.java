@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class PruebaEvaluacionRepository implements IEvaluacionRepository<PruebasEvaluacion> {
+public class PruebaEvaluacionRepository implements IPruebaEvaluacionRepository<PruebasEvaluacion> {
     public final Map<Integer, PruebasEvaluacion>  evaluaciones = new HashMap<>();
 
     /**
@@ -52,7 +52,7 @@ public class PruebaEvaluacionRepository implements IEvaluacionRepository<Pruebas
      */
     @Override
     public PruebasEvaluacion delete(PruebasEvaluacion evaluationTest) {
-        return this.evaluaciones.remove(evaluationTest);
+        return this.evaluaciones.remove(evaluationTest.getId());
     }
 
 
@@ -61,7 +61,7 @@ public class PruebaEvaluacionRepository implements IEvaluacionRepository<Pruebas
      * @param id de la prueba de evaluación a buscar.
      * @return Devuelve la prueba de evaluación.
      */
-    private PruebasEvaluacion findById(int id) {
+    public PruebasEvaluacion findById(int id) {
         return this.evaluaciones.get(id);
     }
 }
