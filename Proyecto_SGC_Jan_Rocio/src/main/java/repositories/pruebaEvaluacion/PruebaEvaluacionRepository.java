@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 public class PruebaEvaluacionRepository implements IEvaluacionRepository<PruebasEvaluacion> {
-    public final Map<Integer, PruebasEvaluacion>  evaluaciones = new HashMap<>();
+    public final Map<Integer, PruebasEvaluacion> evaluationTest = new HashMap<>();
 
     /**
      * Crea una evaluación
@@ -18,31 +18,20 @@ public class PruebaEvaluacionRepository implements IEvaluacionRepository<Pruebas
      */
     @Override
     public PruebasEvaluacion save(PruebasEvaluacion evaluationTest) {
-        this.evaluaciones.put(evaluationTest.getId(), evaluationTest);
-        return this.evaluaciones.get(evaluationTest.getId());
+        this.evaluationTest.put(evaluationTest.getId(), evaluationTest);
+        return this.evaluationTest.get(evaluationTest.getId());
     }
 
 
     /**
-     * Devuelve todas la evaluaciones
-     * @return devuelve las evaluaciones
+     * Devuelve todas la evaluationTest
+     * @return devuelve las evaluationTest
      */
     @Override
     public List<PruebasEvaluacion> findAll() {
-        return new ArrayList<>(this.evaluaciones.values());
+        return new ArrayList<>(this.evaluationTest.values());
     }
 
-
-    /**
-     * Crea una prueba de evaluación
-     * @param evaluationTest Prueba que se va a crear.
-     * @return Devuelve la prueba.
-     */
-    @Override
-    public PruebasEvaluacion create(PruebasEvaluacion evaluationTest) {
-        this.evaluaciones.put(evaluationTest.getId(), evaluationTest);
-        return this.evaluaciones.get(evaluationTest.getId());
-    }
 
 
     /**
@@ -52,7 +41,7 @@ public class PruebaEvaluacionRepository implements IEvaluacionRepository<Pruebas
      */
     @Override
     public PruebasEvaluacion delete(PruebasEvaluacion evaluationTest) {
-        return this.evaluaciones.remove(evaluationTest);
+        return this.evaluationTest.remove(evaluationTest.getId());
     }
 
 
@@ -61,7 +50,7 @@ public class PruebaEvaluacionRepository implements IEvaluacionRepository<Pruebas
      * @param id de la prueba de evaluación a buscar.
      * @return Devuelve la prueba de evaluación.
      */
-    private PruebasEvaluacion findById(int id) {
-        return this.evaluaciones.get(id);
+    public PruebasEvaluacion findById(int id) {
+        return this.evaluationTest.get(id);
     }
 }

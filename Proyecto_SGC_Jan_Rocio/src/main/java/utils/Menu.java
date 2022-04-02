@@ -72,6 +72,26 @@ public class Menu {
     }
 
 
+    /**
+     * Menú de gestión de evaluationTest.
+     * @return opción elegida.
+     */
+    public static int assessmentScreen(){
+        String regex="^[0-3,$]$";
+        String option;
+        do {
+            System.out.println(colorize("\nElige una opción", Attribute.TEXT_COLOR(200)));
+            System.out.println(" -1 Mostrar prueba de evalución \n" +
+                    " -2 Crear prueba de evaluación \n" +
+                    " -3 Eliminar prueba de evaluación \n" +
+                    " -4 Mostrar todas las pruebas de evaluación \n" +
+                    " -0 Salir");
+            option=in.nextLine();
+        }while(!option.matches(regex));
+        return Integer.parseInt(option);
+    }
+
+
 
 
 }
