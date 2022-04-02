@@ -59,10 +59,22 @@ public class Calificacion {
     }
 
 
+    /**
+     * Para pasar a markdown la calificación
+     * @return String markdonw calificacion
+     */
+    public String toMarkdown() {
+        return "## Calificacion{" +
+                "* id=" + id + " * \n" +
+                "* student=" + student + " * \n" +
+                "* nota=" + nota + " * \n" +
+                "* localDateTime=" + createdAt + " * \n" +
+                "## }";
+    }
+
+
 
     //---------------------------------Equals and HashCode--------------------------------//
-
-
 
 
     @Override
@@ -88,4 +100,6 @@ public class Calificacion {
                 ", localDateTime=" + createdAt +
                 '}';
     }
+
+
 }
