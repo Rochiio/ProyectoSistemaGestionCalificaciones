@@ -174,6 +174,32 @@ public class PruebasEvaluacion {
     }
 
 
+    /**
+     * Método para poner la clase en markdown para añadirlo a un fichero
+     * @return String en forma markdown
+     */
+    public String toMarkdown(){
+    String result = "";
+        try {
+            result= "# PruebasEvaluacion{ \n" +
+                    "** id=" + id + " ** \n" +
+                    "** date=" + Format.formatDateMedium(date) + " ** \n" +
+                    "** descripcion='" + descripcion + " ** \n" +
+                    "** maximumNote=" + maximumNote + " ** \n" +
+                    "** minimumNote=" + minimumNote + " ** \n" +
+                    "** averageGrade=" + averageGrade + " ** \n" +
+                    "** passPercentages=" + passPercentages + " ** \n" +
+                    "** failPercentages=" + failPercentages + " ** \n" +
+                    "** categoriaRepository=" + category + " ** \n" +
+                    "## calificacionRepository=" + calificacionRepository.toMarkdown()+
+                    "# }";
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+
     @Override
     public String toString() {
     String result = "";

@@ -1,6 +1,7 @@
 package repositories.calificaciones;
 
 import exceptions.CalificacionException;
+import models.alumno.Alumno;
 import models.calificacion.Calificacion;
 
 import java.util.*;
@@ -25,11 +26,13 @@ public class CalificacionRepository implements ICalificacionRepository<Calificac
      */
     @Override
     public Calificacion findByAlumno(Calificacion ratings) {
-        var exist = findByAlumno(ratings);
-        if (exist.getStudent().equals(ratings.getStudent())){
-            return exist;
+        Calificacion exist=null;
+        for (Integer key :this.qualifications.keySet()){
+            if (this.qualifications.get(key).getStudent().equals(ratings.getStudent())){
+                exist = this.qualifications.get(key);
+            }
         }
-        return null;
+        return exist;
     }
 
 
@@ -44,7 +47,7 @@ public class CalificacionRepository implements ICalificacionRepository<Calificac
     }
 
 
-    /**
+    /**TODO LAS CALIFICACIONES NO SE PUEDEN MODIFICAR MIRA EL PDF
      * Actualiza una calificación
      * @param id de la calificaciones a actualizar
      * @param newCalificacion la nueva calificación
@@ -61,6 +64,20 @@ public class CalificacionRepository implements ICalificacionRepository<Calificac
             throw new CalificacionException("La calificaciones con ese id no existe.");
         }
         return this.qualifications.get(id);
+    }
+
+
+    /**
+     *Para imprimir la lista en modo markdown
+     * @return String en forma markdown.
+     */
+    @Override
+    public String toMarkdown() {
+        StringBuilder result = new StringBuilder();
+            for (Calificacion calificacion : this.qualifications.values()){
+                result.append("- ").append(calificacion.toMarkdown()).append("\n");
+            }
+      return result.toString();
     }
 
 

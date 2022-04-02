@@ -10,4 +10,5 @@ public interface ICalificacionRepository<T> extends ICRUDCalificacion<T> {
     T findByAlumno(T student);
     T findById(int id);
     T update(Integer id, Calificacion newCalificacion) throws CalificacionException;
+    String toMarkdown();
 }
