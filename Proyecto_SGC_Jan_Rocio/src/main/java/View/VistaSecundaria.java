@@ -4,10 +4,13 @@ import compares.AlumnoOrdenAlfabeticoComparator;
 import compares.AlumnoOrdenListaComparator;
 import controllers.AlumnoController;
 import controllers.CategoriaController;
+import controllers.EvaluacionController;
 import exceptions.AlumnoException;
 import exceptions.CategoriaException;
+import exceptions.EvaluacionException;
 import models.alumno.Alumno;
 import models.categoria.Categoria;
+import models.pruebaEvaluacion.PruebasEvaluacion;
 import utils.Inputs;
 
 
@@ -15,11 +18,15 @@ import utils.Inputs;
 public class VistaSecundaria {
     private final AlumnoController studentController;
     private final CategoriaController categoryController;
+    private final EvaluacionController evaluationController;
 
-    public VistaSecundaria(AlumnoController studentController, CategoriaController categoryController) {
+    public VistaSecundaria(AlumnoController studentController, CategoriaController categoryController,EvaluacionController evaluacionController) {
         this.studentController = studentController;
         this.categoryController = categoryController;
+        this.evaluationController = evaluacionController;
     }
+
+    //Alumnos
 
     /**
      * Añadir un alumno.
@@ -54,7 +61,7 @@ public class VistaSecundaria {
             try {
                 mostrar = studentController.delete(Integer.parseInt(numberStudent));
             } catch (AlumnoException e) {
-                e.printStackTrace();
+                System.out.println(e.getMessage());
             }
         System.out.println("Alumno eliminado: "+ mostrar);
     }
@@ -122,6 +129,9 @@ public class VistaSecundaria {
     }
 
 
+    //Categorías
+
+
     /**
      * Añadir categoría.
      */
@@ -186,4 +196,71 @@ public class VistaSecundaria {
     }
 
 
+    //Pruebas de evaluación
+
+
+    /**
+     * Muestra una prueba de evaluacion.
+     */
+    public void showEvaluation(){
+        int option = Integer.parseInt(Inputs.inputWithRegex("[0-9]*","Dime el id de la prueba d eevaluación a ver"));
+            try{
+                var showTest = this.evaluationController.showTestEvaluation(option);
+                System.out.println(showTest.toString());
+            }catch (EvaluacionException e) {
+                System.out.println(e.getMessage());
+            }
+    }
+
+
+    /**
+     * Crea una prueba evaluación
+     * TODO hacerlo
+     */
+    public void createEvaluation(){
+        System.out.println("Crear una prueba de evaluación");
+        /*Evaluacion eva = new Evaluacion(new PruebaEvaluacionRepository(Inputs.inputStrings("Dime la descripción: "),
+                new Categoria(Inputs.inputStrings("Nombre de la valuación")),
+                new CalificacionRepository<Calificacion>(new Alumno(
+                        Inputs.inputStrings("Dime el DNi del alumno [NNNNNNNNL]"),
+                        Inputs.inputStrings("Dime el nombre del alumno"),
+                        Inputs.inputStrings("Dime los apellidos del alumno"),
+                        Inputs.inputStrings("Dime el email del alumno"),
+                        Inputs.inputStrings("Dime el número de teléfono del alumno [NNN-NNNNNN]"),
+                        (Inputs.inputStrings( "Tiene evaluación continua 1.Si 0.No").equals("1")))), 5.6F)));
+
+
+        this.evaluacionController.CreateEvaluation(eva);*/
+    }
+
+
+    /**
+     * Elimina una prueba de evaluación.
+     */
+    public void deleteEvaluation() {
+        var deleteTest = Inputs.inputStrings("Introduce la evaluación a eliminar: ");
+            try{
+                var res = this.evaluationController.deleteEvaluation(Integer.parseInt(deleteTest));
+                System.out.println("Prueba de evaluación eliminada: " + res.toString());
+            } catch (EvaluacionException e) {
+                System.out.println(e.getMessage());
+            }
+    }
+
+
+    /**
+     * Mostrar todas las pruebas de evaluación.
+     */
+    public void showAllEvaluations() {
+        try{
+            var list = this.evaluationController.showAllTestEvaluation();
+
+                for (PruebasEvaluacion test : list){
+                    System.out.println(test.toString());
+                }
+
+        } catch (EvaluacionException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }

@@ -1,10 +1,10 @@
 package repositories.pruebaEvaluacion;
 
 public interface ICRUDEvaluacion<T> {
-    T create(T item);
+    T save(T evaluationTest);
 
     T delete(T id);
 
-
+    T findById(int id);
 }
 

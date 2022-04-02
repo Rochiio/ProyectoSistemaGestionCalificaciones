@@ -25,19 +25,19 @@ public class PruebasEvaluacion {
     private ICalificacionRepository<Calificacion> calificacionRepository;
 
 
-    public PruebasEvaluacion(LocalDateTime date, String descripcion, float maximumNote, float minimumNote,
-                             float averageGrade, float passPercentages, float failPercentages, Categoria category,
+    public PruebasEvaluacion(LocalDateTime date, String descripcion, Categoria category,
                              CalificacionRepository calificacionRepository) {
         this.id = ++contador;
         this.date = date;
         this.descripcion = descripcion;
-        this.maximumNote = maximumNote;
-        this.minimumNote = minimumNote;
-        this.averageGrade = averageGrade;
-        this.passPercentages = passPercentages;
-        this.failPercentages = failPercentages;
         this.category = category;
         this.calificacionRepository = calificacionRepository;
+        this.maximumNote = maximumScore();
+        this.minimumNote = minimumScore();
+        this.averageGrade = averageScore();
+        this.passPercentages = percentageApproved();
+        this.failPercentages = failureRate();
+
     }
 
 
@@ -97,11 +97,11 @@ public class PruebasEvaluacion {
         this.failPercentages = failPercentages;
     }
 
-    public Categoria getCategoriaRepository() {
+    public Categoria getCategory() {
         return category;
     }
 
-    public void setCategoriaRepository(Categoria category) {
+    public void setCategory(Categoria category) {
         this.category = category;
     }
 
@@ -111,6 +111,66 @@ public class PruebasEvaluacion {
 
     public void setCalificacionRepository(CalificacionRepository calificacionRepository) {
         this.calificacionRepository = calificacionRepository;
+    }
+
+
+    /**
+     * Calcula la nota media
+     * @return Devuelve la nota media
+     * TODO hacerlo
+     */
+    private float averageScore(){
+        float score;
+        var todo = this.calificacionRepository.findAll();
+        for (Calificacion calificacion: this.calificacionRepository.findAll()
+             ) {
+
+        }
+        return 3.0f;
+    }
+
+
+    //TODO HACER METODO PARA OBJETENER EL MAXIMO
+    private float maximumScore() {
+        return 3.00F;
+    }
+
+
+    //TODO HACER METODO PARA OBJETENER EL minimo
+    private float minimumScore() {
+        return 3.00F;
+    }
+
+
+    /**
+     * Calcula el porcentaje de aprobados
+     * @return Devuelve el porcentaje de aprobados.
+     */
+    private float percentageApproved(){
+        float score = 0;
+        var notas = calificacionRepository.findAll();
+        for (var note: notas) {
+            if (note.getNota() >= 5){
+                score = note.getNota();
+            }
+        }
+        return score;
+    }
+
+
+    /**
+     * Calcula el procentaje de suspensos.
+     * @return Devuelve el porcentaje de suspensos
+     */
+    private float failureRate(){
+        float score = 0;
+        var notas = calificacionRepository.findAll();
+        for (var note: notas) {
+            if (note.getNota() < 5){
+                score = note.getNota();
+            }
+        }
+        return score;
     }
 
 
