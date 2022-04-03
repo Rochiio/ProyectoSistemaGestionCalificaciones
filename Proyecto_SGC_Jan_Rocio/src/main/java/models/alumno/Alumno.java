@@ -7,8 +7,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Alumno {
-    private static int contador=0;
-    private final int id;
+    private int id;
     private String dni;     //NNNNNNNNL
     private String name;
     private String lastName;
@@ -29,7 +28,7 @@ public class Alumno {
      * @param continuousEvaluation Si tiene o no evaluacion continua.
      */
     public Alumno(String dni, String name, String lastName, String email, String telephone, boolean continuousEvaluation) {
-        this.id = ++contador;
+//        this.id = ++contador;
         this.dni = dni;
         this.name = name;
         this.lastName = lastName;
@@ -37,6 +36,28 @@ public class Alumno {
         this.telephone = telephone;
         this.continuousEvaluation = continuousEvaluation;
         this.registrationDate = LocalDateTime.now();
+    }
+
+    /**
+     * Constructor prueba para utilizar bases de datos.
+     * @param id id
+     * @param dni DNI del alumno.
+     * @param name Nombre del alumno.
+     * @param lastName Apellidos del alumno.
+     * @param email Correo del alumno.
+     * @param telephone Teléfono del alumno.
+     * @param continuousEvaluation Si tiene o no evaluacion continua.
+     * @param registrationDate fecha registro
+     */
+    public Alumno(int id, String dni, String name, String lastName, String email, String telephone, boolean continuousEvaluation, LocalDateTime registrationDate) {
+        this.id = id;
+        this.dni = dni;
+        this.name = name;
+        this.lastName = lastName;
+        this.email = email;
+        this.telephone = telephone;
+        this.continuousEvaluation = continuousEvaluation;
+        this.registrationDate = registrationDate;
     }
 
 

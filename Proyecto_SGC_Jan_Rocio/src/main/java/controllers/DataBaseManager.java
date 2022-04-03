@@ -12,7 +12,7 @@ import java.util.Optional;
 
 public class DataBaseManager {
     private static DataBaseManager controller;
-    private final boolean fromProperties = true;
+    private final boolean fromProperties = false;
     private String serverUrl;
     private String serverPort;
     private String dataBaseName;
@@ -38,10 +38,12 @@ public class DataBaseManager {
      * Aseguramos siempre una misma instancia.
      */
     private DataBaseManager() {
-        // System.out.println("Mi nombre es: " + this.nombre);
+        System.out.println("Mi nombre es: rocio");
         if (fromProperties) {
+            System.out.println("Entrando en initConfigFromProperties");
             initConfigFromProperties();
         } else {
+            System.out.println("Entrando en initConfig");
             initConfig();
         }
     }
@@ -93,7 +95,7 @@ public class DataBaseManager {
         //String url = "jdbc:sqlite:"+this.ruta+this.bbdd;
         //MySQL jdbc:mysql://localhost/prueba", "root", "1dam"
         String url = "jdbc:mysql://" + this.serverUrl + ":" + this.serverPort + "/" + this.dataBaseName;
-        // System.out.println(url);
+        System.out.println(url);
         // Obtenemos la conexión
         connection = DriverManager.getConnection(url, user, password);
     }
@@ -117,7 +119,7 @@ public class DataBaseManager {
      * @return ResultSet de la consulta
      * @throws SQLException No se ha podido realizar la consulta o la tabla no existe
      */
-    private ResultSet executeQuery( String querySQL, Object... params) throws SQLException {
+    private ResultSet executeQuery(String querySQL, Object... params) throws SQLException {
         preparedStatement = connection.prepareStatement(querySQL);
         // Vamos a pasarle los parametros usando preparedStatement
         for (int i = 0; i < params.length; i++) {

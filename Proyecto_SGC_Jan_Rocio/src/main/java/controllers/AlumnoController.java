@@ -4,7 +4,9 @@ import exceptions.AlumnoException;
 import models.alumno.Alumno;
 import repositories.alumno.IAlumnoRepository;
 
+import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 public class AlumnoController {
     private final IAlumnoRepository<Alumno> studentRepository;
@@ -63,9 +65,9 @@ public class AlumnoController {
      * @return el alumno.
      * @throws AlumnoException si no existe un alumno con ese id.
      */
-    public Alumno showStudent(int numberIdStudent) throws AlumnoException {
-       var returnStudent = studentRepository.findById(numberIdStudent);
-           if (returnStudent==null) {
+    public Optional<Alumno> showStudent(int numberIdStudent) throws AlumnoException, SQLException {
+       var returnStudent = studentRepository.findById(numberIdStudent,DataBaseManager.getInstance());
+           if (returnStudent.isEmpty()) {
                throw new AlumnoException("Error: No existe un alumno con este id");
            }
         return returnStudent;

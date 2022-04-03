@@ -13,6 +13,8 @@ import models.categoria.Categoria;
 import models.pruebaEvaluacion.PruebasEvaluacion;
 import utils.Inputs;
 
+import java.sql.SQLException;
+import java.util.Optional;
 
 
 public class VistaSecundaria {
@@ -72,11 +74,11 @@ public class VistaSecundaria {
      */
     public void showStudent() {
         var numberIdStudent = Integer.parseInt(Inputs.inputWithRegex("[0-9]*","Dime el id del alumno a mostrar"));
-        Alumno show;
+        Optional<Alumno> show;
             try {
                 show = studentController.showStudent(numberIdStudent);
                 System.out.println(show.toString());
-            } catch (AlumnoException e) {
+            } catch (AlumnoException | SQLException e) {
                 System.out.println(e.getMessage());
             }
     }

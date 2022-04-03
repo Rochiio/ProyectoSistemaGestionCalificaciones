@@ -37,11 +37,11 @@ public class VistaPrincipal {
                 break;
             case 3: categoryManagementMenu();
                 break;
-            case 4:
+            case 4: //Importar prueba de evaluación a markdown
                 break;
-            case 5:
+            case 5: //Mostar prueba de evaluación
                 break;
-            case 6:
+            case 6: //Importar/Exportar prueba de evaluación JSON
                 break;
             case 0: System.out.println(colorize("\nAdiós, hasta pronto 👋", Attribute.CYAN_TEXT()));
                 break;
