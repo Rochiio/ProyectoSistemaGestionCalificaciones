@@ -1,11 +1,16 @@
 package repositories.alumno;
 
+import controllers.DataBaseManager;
 import models.alumno.Alumno;
 
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 public class AlumnoRepository implements IAlumnoRepository<Alumno> {
     private final HashMap<Integer, Alumno> lista= new HashMap<>();
@@ -19,6 +24,28 @@ public class AlumnoRepository implements IAlumnoRepository<Alumno> {
     @Override
     public Alumno findById(int id) {
         return lista.get(id);
+    }
+
+    @Override
+    public Optional<Alumno> findById(int id, DataBaseManager db) throws SQLException {
+        String query = "SELECT * FROM Alumno WHERE id = ?";
+        db.open();
+        ResultSet result = db.select(query, id).orElseThrow(() -> new SQLException("Error al consultar pais con nombre " + id));
+        if (result.first()) {
+            Alumno alumno = new Alumno(
+                    result.getInt("id"),
+                    result.getString("Dni"),
+                    result.getString("Nombre"),
+                    result.getString("Apellidos"),
+                    result.getString("Email"),
+                    result.getString("Telefono"),
+                    result.getBoolean("Perdida_Evaluacion"),
+                    result.getObject("Fecha_Matriculacion", LocalDateTime.class)
+            );
+            db.close();
+            return Optional.of(alumno);
+        }
+        return Optional.empty();
     }
 
 

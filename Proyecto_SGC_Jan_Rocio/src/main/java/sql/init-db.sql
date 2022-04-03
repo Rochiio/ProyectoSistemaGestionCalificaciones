@@ -15,6 +15,7 @@ USE proyecto;
 DROP TABLE IF EXISTS Alumno;
 CREATE TABLE Alumno(
     id int AUTO_INCREMENT,
+    Dni varchar(9) NOT NULL,
     Nombre varchar(15) NOT NULL,
     Apellidos varchar(30) NOT NULL,
     Email varchar(20) NOT NULL,
