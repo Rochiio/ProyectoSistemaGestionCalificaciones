@@ -25,6 +25,17 @@ public class Inputs {
     }
 
 
+    /**
+     * Entradas de strings.
+     * @param sentence pregunta.
+     * @return la respuesta del usuario.
+     */
+    public static String inputStrings(String sentence){
+        System.out.println(colorize(sentence, Attribute.CYAN_TEXT()));
+        return  in.nextLine();
+    }
+
+
 
 
 
