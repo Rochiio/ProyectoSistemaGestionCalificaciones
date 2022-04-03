@@ -1,17 +1,19 @@
 package models.calificacion;
 
 import models.alumno.Alumno;
+import utils.Format;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Objects;
 
 public class Calificacion {
     //Declaración de los atributos de la clase.
     private static int contador = 0;
-    private int id;
-    private Alumno student;
+    private final int id;
+    private final Alumno student;
     private float nota;
-    private Date createdAt;
+    private LocalDateTime delivered;
 
 
     /**
@@ -20,11 +22,11 @@ public class Calificacion {
      * @param nota nota del student.
      * @param localDateTime fecha de entrega de las notas.
      */
-    public Calificacion(Alumno student, float nota, Date localDateTime) {
+    public Calificacion(Alumno student, float nota, LocalDateTime localDateTime) {
         this.id = ++contador;
         this.student = student;
         this.nota = nota;
-        this.createdAt = localDateTime;
+        this.delivered = localDateTime;
     }
 
 
@@ -38,10 +40,6 @@ public class Calificacion {
         return student;
     }
 
-    public void setStudent(Alumno alumno) {
-        this.student = alumno;
-    }
-
     public float getNota() {
         return nota;
     }
@@ -50,12 +48,12 @@ public class Calificacion {
         this.nota = nota;
     }
 
-    public Date getCreatedAt() {
-        return createdAt;
+    public LocalDateTime getDelivered() {
+        return delivered;
     }
 
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
+    public void setDelivered(LocalDateTime delivered) {
+        this.delivered = delivered;
     }
 
 
@@ -67,8 +65,8 @@ public class Calificacion {
         return "## Calificacion{" +
                 "* id=" + id + " * \n" +
                 "* student=" + student + " * \n" +
-                "* nota=" + nota + " * \n" +
-                "* localDateTime=" + createdAt + " * \n" +
+                "* nota=" + Format.formatNote(nota) + " * \n" +
+                "* localDateTime=" + delivered + " * \n" +
                 "## }";
     }
 
@@ -82,12 +80,12 @@ public class Calificacion {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Calificacion that = (Calificacion) o;
-        return id == that.id && Float.compare(that.nota, nota) == 0 && Objects.equals(student, that.student) && Objects.equals(createdAt, that.createdAt);
+        return id == that.id && Float.compare(that.nota, nota) == 0 && Objects.equals(student, that.student) && Objects.equals(delivered, that.delivered);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, student, nota, createdAt);
+        return Objects.hash(id, student, nota, delivered);
     }
 
 
@@ -96,8 +94,8 @@ public class Calificacion {
         return "Calificacion{" +
                 "id=" + id +
                 ", student=" + student +
-                ", nota=" + nota +
-                ", localDateTime=" + createdAt +
+                ", nota=" + Format.formatNote(nota) +
+                ", localDateTime=" + delivered +
                 '}';
     }
 
