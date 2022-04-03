@@ -1,7 +1,6 @@
 package repositories.calificaciones;
 
 import exceptions.CalificacionException;
-import models.alumno.Alumno;
 import models.calificacion.Calificacion;
 
 import java.util.*;
@@ -18,6 +17,7 @@ public class CalificacionRepository implements ICalificacionRepository<Calificac
     public List<Calificacion> findAll() {
         return new ArrayList<>(this.qualifications.values());
     }
+
 
     /**
      * Buscar las calificaciones
@@ -48,6 +48,7 @@ public class CalificacionRepository implements ICalificacionRepository<Calificac
 
 
     /**TODO LAS CALIFICACIONES NO SE PUEDEN MODIFICAR MIRA EL PDF
+     * TODO el repositorio te dije que no lanza excepciones eso lo hace el controlador
      * Actualiza una calificación
      * @param id de la calificaciones a actualizar
      * @param newCalificacion la nueva calificación
@@ -59,7 +60,7 @@ public class CalificacionRepository implements ICalificacionRepository<Calificac
         var exists = findById(id);
         if (exists.getId() == newCalificacion.getId()){
             this.qualifications.get(id).setNota(newCalificacion.getNota());
-            this.qualifications.get(id).setCreatedAt(new Date());
+            this.qualifications.get(id).setDelivered(newCalificacion.getDelivered());
         }else {
             throw new CalificacionException("La calificaciones con ese id no existe.");
         }
@@ -103,4 +104,13 @@ public class CalificacionRepository implements ICalificacionRepository<Calificac
         return this.qualifications.remove(item.getId());
     }
 
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (Calificacion c : this.qualifications.values()){
+            sb.append(c.toString()).append("\n");
+        }
+        return sb.toString();
+    }
 }

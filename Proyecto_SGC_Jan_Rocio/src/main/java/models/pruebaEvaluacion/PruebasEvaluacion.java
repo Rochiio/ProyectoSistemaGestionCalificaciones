@@ -185,11 +185,11 @@ public class PruebasEvaluacion {
                     "** id=" + id + " ** \n" +
                     "** date=" + Format.formatDateMedium(date) + " ** \n" +
                     "** descripcion='" + descripcion + " ** \n" +
-                    "** maximumNote=" + maximumNote + " ** \n" +
-                    "** minimumNote=" + minimumNote + " ** \n" +
-                    "** averageGrade=" + averageGrade + " ** \n" +
-                    "** passPercentages=" + passPercentages + " ** \n" +
-                    "** failPercentages=" + failPercentages + " ** \n" +
+                    "** maximumNote=" + Format.formatNote(maximumNote) + " ** \n" +
+                    "** minimumNote=" + Format.formatNote(minimumNote) + " ** \n" +
+                    "** averageGrade=" + Format.formatNote(averageGrade) + " ** \n" +
+                    "** passPercentages=" + Format.formatNote(passPercentages) + " ** \n" +
+                    "** failPercentages=" + Format.formatNote(failPercentages) + " ** \n" +
                     "** categoriaRepository=" + category + " ** \n" +
                     "## calificacionRepository=" + calificacionRepository.toMarkdown()+
                     "# }";
@@ -208,13 +208,13 @@ public class PruebasEvaluacion {
                         "id=" + id +
                         ", date=" + Format.formatDateMedium(date) +
                         ", descripcion='" + descripcion + '\'' +
-                        ", maximumNote=" + maximumNote +
-                        ", minimumNote=" + minimumNote +
-                        ", averageGrade=" + averageGrade +
-                        ", passPercentages=" + passPercentages +
-                        ", failPercentages=" + failPercentages +
+                        ", maximumNote=" + Format.formatNote(maximumNote) +
+                        ", minimumNote=" + Format.formatNote(minimumNote) +
+                        ", averageGrade=" + Format.formatNote(averageGrade) +
+                        ", passPercentages=" + Format.formatNote(passPercentages) +
+                        ", failPercentages=" + Format.formatNote(failPercentages) +
                         ", categoriaRepository=" + category +
-                        ", calificacionRepository=" + calificacionRepository +
+                        ", calificacionRepository=" + calificacionRepository.toString() +
                         '}';
             } catch (ParseException e) {
                 e.printStackTrace();
