@@ -8,8 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IAlumnoRepository<T> extends ICRUAlumno<T> {
-     Optional<T> findById(int id, DataBaseManager db) throws SQLException;
      List<Alumno> findAll(DataBaseManager db) throws SQLException;
-     T findByDni(String dni);
-     int hasEvaluationTest(int id);
+     Optional<T> findByDni(String dni,DataBaseManager db) throws SQLException;
+     int hasEvaluationTest(int id,DataBaseManager db) throws SQLException;
 }

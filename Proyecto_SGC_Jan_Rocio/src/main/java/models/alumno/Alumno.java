@@ -13,7 +13,7 @@ public class Alumno {
     private String lastName;
     private String email;
     private String telephone;       //NNN-NNNNNN
-    private int evaluationTests=0;
+    private int evaluationTests=0;      //numero de pruebas de evaluacion en las que está añadido el usuario.
     private boolean continuousEvaluation;
     private final LocalDateTime registrationDate;      //DD/MM/AAAA
 
@@ -49,19 +49,25 @@ public class Alumno {
      * @param continuousEvaluation Si tiene o no evaluacion continua.
      * @param registrationDate fecha registro
      */
-    public Alumno(int id, String dni, String name, String lastName, String email, String telephone, boolean continuousEvaluation, LocalDateTime registrationDate) {
+    public Alumno(int id, String dni, String name, String lastName, String email, String telephone,int evaluationTests, boolean continuousEvaluation, LocalDateTime registrationDate) {
         this.id = id;
         this.dni = dni;
         this.name = name;
         this.lastName = lastName;
         this.email = email;
         this.telephone = telephone;
+        this.evaluationTests = evaluationTests;
         this.continuousEvaluation = continuousEvaluation;
         this.registrationDate = registrationDate;
     }
 
 
     //------------------------------------------Getters & Setters-----------------------------------------------
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public int getId() {
         return this.id;
     }
@@ -118,6 +124,10 @@ public class Alumno {
         return this.continuousEvaluation;
     }
 
+    public LocalDateTime getRegistrationDate() {
+        return registrationDate;
+    }
+
     public void setContinuousEvaluation(boolean continuousEvaluation) {
         this.continuousEvaluation = continuousEvaluation;
     }
@@ -149,6 +159,7 @@ public class Alumno {
                         ", lastName='" + lastName + '\'' +
                         ", email='" + email + '\'' +
                         ", telephone='" + telephone + '\'' +
+                        ", evaluationTest='" + evaluationTests + '\'' +
                         ", continuousEvaluation=" + continuousEvaluation +
                         ", registrationDate=" + Format.formatDateShort(registrationDate) +
                         '}';
