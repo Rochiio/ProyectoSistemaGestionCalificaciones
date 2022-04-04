@@ -44,10 +44,10 @@ public class AlumnoController {
      * @return el alumno eliminado
      * @throws AlumnoException si no existe ningún alumno con ese id o el alumno está añadido en pruebas de evaluación.
      */
-    public Alumno delete(int numberStudent) throws AlumnoException {
+    public Alumno delete(int numberStudent) throws AlumnoException, SQLException {
         Alumno returnStudent;
-        var exist = studentRepository.findById(numberStudent);
-        if (exist!=null) {
+        var exist = studentRepository.findById(numberStudent,DataBaseManager.getInstance());
+        if (exist.isPresent()) {
             var numberEvaluation = studentRepository.hasEvaluationTest(numberStudent);
             if (numberEvaluation==0) {
                 returnStudent = studentRepository.delete(numberStudent);
@@ -78,9 +78,10 @@ public class AlumnoController {
      * Mostrar todos los alumnos.
      * @return lista de alumnos.
      * @throws AlumnoException si no hay ningún alumno añadido.
+     * @throws SQLException si hay algún error al recoger todos los datos.
      */
-    public List<Alumno> showAllStudents() throws AlumnoException {
-        var returnAllStudents = studentRepository.findAll();
+    public List<Alumno> showAllStudents() throws AlumnoException, SQLException {
+        var returnAllStudents = studentRepository.findAll(DataBaseManager.getInstance());
             if (returnAllStudents.size() == 0){
                 throw new AlumnoException("Error: No hay ningún alumno");
             }
@@ -94,13 +95,14 @@ public class AlumnoController {
      * @param modify nuevos datos.
      * @return el alumno modificado.
      * @throws AlumnoException si no eiste un alumno con ese id.
+     * @throws SQLException si hay un error al obtener el id.
      */
-    public Alumno modifyStudent(int id, Alumno modify) throws AlumnoException {
+    public Alumno modifyStudent(int id, Alumno modify) throws AlumnoException, SQLException {
         Alumno returnStudent;
-        var exist = studentRepository.findById(id);
-            if (exist != null) {
+        var exist = studentRepository.findById(id,DataBaseManager.getInstance());
+            if (exist.isPresent()) {
                 var newDniOkey = studentRepository.findByDni(modify.getDni());
-                    if (newDniOkey == null || newDniOkey.getId()==exist.getId()) {
+                    if (newDniOkey == null || newDniOkey.getId()==exist.get().getId()) {
                         returnStudent = studentRepository.update(id, modify);
                     } else{
                         throw new AlumnoException("Ya existe un alumno con este dni");

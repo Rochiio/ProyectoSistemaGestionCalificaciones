@@ -1,7 +1,5 @@
 package View;
 
-import compares.AlumnoOrdenAlfabeticoComparator;
-import compares.AlumnoOrdenListaComparator;
 import controllers.AlumnoController;
 import controllers.CategoriaController;
 import controllers.EvaluacionController;
@@ -14,6 +12,7 @@ import models.pruebaEvaluacion.PruebasEvaluacion;
 import utils.Inputs;
 
 import java.sql.SQLException;
+import java.util.Comparator;
 import java.util.Optional;
 
 
@@ -62,7 +61,7 @@ public class VistaSecundaria {
         Alumno mostrar = null;
             try {
                 mostrar = studentController.delete(Integer.parseInt(numberStudent));
-            } catch (AlumnoException e) {
+            } catch (AlumnoException | SQLException  e) {
                 System.out.println(e.getMessage());
             }
         System.out.println("Alumno eliminado: "+ mostrar);
@@ -92,16 +91,11 @@ public class VistaSecundaria {
         try {
             var show = studentController.showAllStudents();
                 if (option.equals("1")){
-                    show.sort(new AlumnoOrdenListaComparator());
+                    show.stream().sorted(Comparator.comparing(Alumno::getId)).forEach(System.out::println);
                 }else{
-                    show.sort(new AlumnoOrdenAlfabeticoComparator());
+                    show.stream().sorted(Comparator.comparing(Alumno::getName)).forEach(System.out::println);
                 }
-
-            for (Alumno alumno: show) {
-                System.out.println(alumno);
-            }
-
-        } catch (AlumnoException e) {
+        } catch (AlumnoException | SQLException e) {
             System.out.println(e.getMessage());
         }
     }
@@ -125,7 +119,7 @@ public class VistaSecundaria {
             try {
                 var returnStudent = studentController.modifyStudent(id,modify);
                 System.out.println("Modificado: " +returnStudent);
-            } catch (AlumnoException e) {
+            } catch (AlumnoException | SQLException e) {
                 System.out.println(e.getMessage());
             }
     }
