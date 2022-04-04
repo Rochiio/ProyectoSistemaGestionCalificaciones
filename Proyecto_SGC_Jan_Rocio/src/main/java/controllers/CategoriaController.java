@@ -5,7 +5,9 @@ import models.categoria.Categoria;
 
 import repositories.categoria.ICategoriaRepository;
 
+import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 public class CategoriaController {
     private final ICategoriaRepository<Categoria> categoryRepository;
@@ -26,11 +28,11 @@ public class CategoriaController {
      * @return categoria nueva añadida.
      * @throws CategoriaException si ya existe una categoría con ese nombre.
      */
-    public Categoria addCategory(Categoria category) throws CategoriaException {
+    public Categoria addCategory(Categoria category) throws CategoriaException, SQLException {
         Categoria returnCategory;
-        var exist = categoryRepository.findByName(category.getName());
-            if (exist == null){
-                returnCategory=categoryRepository.save(category);
+        var exist = categoryRepository.findByName(category.getName(),DataBaseManager.getInstance());
+            if (exist.isEmpty()){
+                returnCategory=categoryRepository.save(category,DataBaseManager.getInstance());
             }else {
                 throw new CategoriaException("Ya existe una categoría con este nombre");
             }
@@ -45,12 +47,12 @@ public class CategoriaController {
      * @return la categoría modificada.
      * @throws CategoriaException si no existe una categoría con ese id.
      */
-    public Categoria modifyCategory(int id, String newName) throws CategoriaException {
+    public Categoria modifyCategory(int id, String newName) throws CategoriaException, SQLException {
         Categoria returnCategory;
-        var exist = categoryRepository.findById(id);
-            if (exist != null) {
-                var newNameOkey = categoryRepository.findByName(newName);
-                    if (newNameOkey == null) {
+        var exist = categoryRepository.findById(id, DataBaseManager.getInstance());
+            if (exist.isPresent()) {
+                var newNameOkey = categoryRepository.findByName(newName,DataBaseManager.getInstance());
+                    if (newNameOkey.isEmpty()) {
                         returnCategory = categoryRepository.update(id, newName);
                     } else {
                         throw new CategoriaException("Ya existe una categoría con este nombre");
@@ -67,18 +69,23 @@ public class CategoriaController {
      * @param numberIdCategory id de la categoría a mostrar.
      * @return la categoría.
      */
-    public Categoria showCategory(int numberIdCategory) throws CategoriaException {
-        var returnCategory = categoryRepository.findById(numberIdCategory);
-        if (returnCategory==null) {
+    public Optional<Categoria> showCategory(int numberIdCategory) throws CategoriaException, SQLException {
+        var returnCategory = categoryRepository.findById(numberIdCategory,DataBaseManager.getInstance());
+        if (returnCategory.isEmpty()) {
             throw new CategoriaException("Error: No existe una categoría con este id");
         }
         return returnCategory;
     }
 
 
-
-    public List<Categoria> showAllCategories() throws CategoriaException {
-        var returnAllCategories = categoryRepository.findAll();
+    /**
+     * Mostrar todas las categorías.
+     * @return lista de categorías.
+     * @throws CategoriaException si no hay ninguna categoria.
+     * @throws SQLException si hay error con la base de datos.
+     */
+    public List<Categoria> showAllCategories() throws CategoriaException, SQLException {
+        var returnAllCategories = categoryRepository.findAll(DataBaseManager.getInstance());
         if (returnAllCategories.size() == 0){
             throw new CategoriaException("Error: No hay ninguna categoría");
         }
