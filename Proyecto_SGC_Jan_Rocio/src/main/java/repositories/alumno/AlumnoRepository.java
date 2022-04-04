@@ -22,16 +22,11 @@ public class AlumnoRepository implements IAlumnoRepository<Alumno> {
      * @return el alumno si lo encuentra o null.
      */
     @Override
-    public Alumno findById(int id) {
-        return lista.get(id);
-    }
-
-    @Override
     public Optional<Alumno> findById(int id, DataBaseManager db) throws SQLException {
-        String query = "SELECT * FROM Alumno WHERE id = ?";
+        String query = "SELECT * FROM alumno WHERE id = ?";
         db.open();
-        ResultSet result = db.select(query, id).orElseThrow(() -> new SQLException("Error al consultar pais con nombre " + id));
-        if (result.first()) {
+        ResultSet result = db.select(query, id).orElseThrow(() -> new SQLException("Error al consultar alumno con id: " + id));
+        if (result.next()) {
             Alumno alumno = new Alumno(
                     result.getInt("id"),
                     result.getString("Dni"),
@@ -54,8 +49,28 @@ public class AlumnoRepository implements IAlumnoRepository<Alumno> {
      * @return lista con todos los alumnos.
      */
     @Override
-    public List<Alumno> findAll() {
-        return new ArrayList<>(this.lista.values());
+    public List<Alumno> findAll(DataBaseManager db) throws SQLException {
+        String query = "SELECT * FROM alumno";
+        db.open();
+        ResultSet result = db.select(query).orElseThrow(() -> new SQLException("Error al obtener todos los alumnos"));
+        List<Alumno> list = new ArrayList<>() {
+        };
+        while (result.next()) {
+            list.add(
+                    new Alumno(
+                            result.getInt("id"),
+                            result.getString("Dni"),
+                            result.getString("Nombre"),
+                            result.getString("Apellidos"),
+                            result.getString("Email"),
+                            result.getString("Telefono"),
+                            result.getBoolean("Perdida_Evaluacion"),
+                            result.getObject("Fecha_Matriculacion", LocalDateTime.class)
+                    )
+            );
+        }
+        db.close();
+        return list;
     }
 
 

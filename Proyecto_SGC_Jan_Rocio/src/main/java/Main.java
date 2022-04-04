@@ -20,12 +20,13 @@ import java.util.Optional;
 public class Main {
 
     public static void main(String[] args){
-        //checkServer();
+        checkServer();
         //initData();
 
         VistaPrincipal pantalla = new VistaPrincipal
                 (new VistaSecundaria(new AlumnoController(new AlumnoRepository()),
-                new CategoriaController(new CategoriaRepository()),new EvaluacionController(new Evaluacion(new PruebaEvaluacionRepository()))));
+                new CategoriaController(new CategoriaRepository()),
+                        new EvaluacionController(new Evaluacion(new PruebaEvaluacionRepository()))));
 
 
         pantalla.program();
@@ -33,7 +34,7 @@ public class Main {
     }
 
 
-    //TODO da error, preguntar JL.
+
     private static void checkServer() {
         System.out.println("Comprobamos la conexión al Servidor BD");
         DataBaseManager controller = DataBaseManager.getInstance();
@@ -42,7 +43,7 @@ public class Main {
             Optional<ResultSet> rs = controller.select("SELECT 'HOLA'");
             if (rs.isPresent()) {
                 System.out.println("entramos");
-                rs.get().first();
+                rs.get().next();
                 System.out.println("pasamos");
                 controller.close();
                 System.out.println("Conexión con la Base de Datos realizada con éxito");
@@ -55,9 +56,9 @@ public class Main {
 
 
     private static void initData() {
-        ApplicationProperties properties = new ApplicationProperties();
-        boolean init = Boolean.parseBoolean(properties.readProperty("database.initdata"));
-        if (init) {
+        //ApplicationProperties properties = new ApplicationProperties();
+        //boolean init = Boolean.parseBoolean(properties.readProperty("database.initdata"));
+        //if (init) {
             System.out.println("Iniciamos los datos de ejemplo de la Base de Datos");
             DataBaseManager controller = DataBaseManager.getInstance();
             String dataPath = "sql" + File.separator + "init-db.sql";
@@ -76,5 +77,5 @@ public class Main {
                 System.exit(1);
             }
         }
-    }
+    //}
 }

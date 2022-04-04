@@ -22,6 +22,11 @@ public class TextoMarkdown implements IExport<PruebasEvaluacion> {
         init(file);
     }
 
+
+    /**
+     * Inicializar la ruta del fichero a donde el usuario elija.
+     * @param file carpeta en la que va a querer guardar el fichero.
+     */
     private void init(String file) {
         String dir = ruta + File.separator + file;
         this.pruebasEvaluacion= dir + File.separator + "pruebaEvaluacion.md";
@@ -36,6 +41,10 @@ public class TextoMarkdown implements IExport<PruebasEvaluacion> {
     }
 
 
+    /**
+     * Guardar el fichero en markdown.
+     * @param item la prueba de evaluacion que se va a pasar a markdown.
+     */
     @Override
     public void save(PruebasEvaluacion item) {
         File fichero;
@@ -54,6 +63,7 @@ public class TextoMarkdown implements IExport<PruebasEvaluacion> {
             f = new BufferedWriter(new FileWriter(fichero,true));
 
             f.write(item.toMarkdown());
+
             long endTime = System.nanoTime() - startTime; // tiempo en que se ejecuta su método
             f.write("Informe generado el " +Format.formatDateMedium(LocalDateTime.now())+ " en " +endTime+" segundos.");
 

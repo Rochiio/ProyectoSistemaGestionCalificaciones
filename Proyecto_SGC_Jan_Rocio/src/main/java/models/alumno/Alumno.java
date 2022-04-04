@@ -62,6 +62,10 @@ public class Alumno {
 
 
     //------------------------------------------Getters & Setters-----------------------------------------------
+    public int getId() {
+        return this.id;
+    }
+
     public String getDni() {
         return dni;
     }
@@ -118,9 +122,7 @@ public class Alumno {
         this.continuousEvaluation = continuousEvaluation;
     }
 
-    public int getId() {
-        return this.id;
-    }
+
 
 
     @Override
