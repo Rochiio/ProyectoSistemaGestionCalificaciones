@@ -38,7 +38,6 @@ public class DataBaseManager {
      * Aseguramos siempre una misma instancia.
      */
     private DataBaseManager() {
-        System.out.println("Mi nombre es: rocio");
         if (fromProperties) {
             System.out.println("Entrando en initConfigFromProperties");
             initConfigFromProperties();
@@ -95,7 +94,7 @@ public class DataBaseManager {
         //String url = "jdbc:sqlite:"+this.ruta+this.bbdd;
         //MySQL jdbc:mysql://localhost/prueba", "root", "1dam"
         String url = "jdbc:mysql://" + this.serverUrl + ":" + this.serverPort + "/" + this.dataBaseName;
-        System.out.println(url);
+        //System.out.println(url);
         // Obtenemos la conexión
         connection = DriverManager.getConnection(url, user, password);
     }

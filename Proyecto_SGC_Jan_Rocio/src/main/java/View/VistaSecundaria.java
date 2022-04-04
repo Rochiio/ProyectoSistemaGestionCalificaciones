@@ -138,7 +138,7 @@ public class VistaSecundaria {
             try{
                 var show = categoryController.addCategory(newCategoria);
                 System.out.println("Categoría añadida: " +show.toString());
-            } catch (CategoriaException e) {
+            } catch (CategoriaException | SQLException e) {
                 System.out.println(e.getMessage());
             }
     }
@@ -154,7 +154,7 @@ public class VistaSecundaria {
                 try {
                     var returnCategory = categoryController.modifyCategory(id,newName);
                     System.out.println("Categoría modificada: " + returnCategory.toString());
-                } catch (CategoriaException e) {
+                } catch (CategoriaException | SQLException e) {
                     System.out.println(e.getMessage());
                 }
     }
@@ -165,11 +165,11 @@ public class VistaSecundaria {
      */
     public void showCategory() {
         var numberIdCategory = Integer.parseInt(Inputs.inputWithRegex("[0-9]*","Dime el id de la categoría a mostrar"));
-        Categoria show;
+        Optional<Categoria> show;
             try {
                 show = categoryController.showCategory(numberIdCategory);
                 System.out.println(show.toString());
-            } catch (CategoriaException e) {
+            } catch (CategoriaException | SQLException e) {
                 System.out.println(e.getMessage());
             }
     }
@@ -186,7 +186,7 @@ public class VistaSecundaria {
                     System.out.println(category.toString());
                 }
 
-        } catch (CategoriaException e) {
+        } catch (CategoriaException | SQLException e) {
             System.out.println(e.getMessage());
         }
     }
