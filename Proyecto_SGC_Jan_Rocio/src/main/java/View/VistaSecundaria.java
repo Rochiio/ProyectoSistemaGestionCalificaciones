@@ -47,7 +47,7 @@ public class VistaSecundaria {
                   var mostrar = studentController.add(newStudent);
                   System.out.println("Alumno añadido: " +mostrar);
 
-            } catch (AlumnoException e) {
+            } catch (AlumnoException | SQLException e) {
                 System.out.println(e.getMessage());
             }
     }
@@ -58,7 +58,7 @@ public class VistaSecundaria {
      */
     public void deleteStudent() {
         var numberStudent = Inputs.inputWithRegex("[0-9]*","Dime el id del alumno a eliminar");
-        Alumno mostrar = null;
+        Optional<Alumno> mostrar = Optional.empty();
             try {
                 mostrar = studentController.delete(Integer.parseInt(numberStudent));
             } catch (AlumnoException | SQLException  e) {

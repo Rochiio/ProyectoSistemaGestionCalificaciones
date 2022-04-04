@@ -25,20 +25,21 @@ public class AlumnoRepository implements IAlumnoRepository<Alumno> {
     public Optional<Alumno> findById(int id, DataBaseManager db) throws SQLException {
         String query = "SELECT * FROM alumno WHERE id = ?";
         db.open();
-        ResultSet result = db.select(query, id).orElseThrow(() -> new SQLException("Error al consultar alumno con id: " + id));
-        if (result.next()) {
-            Alumno alumno = new Alumno(
-                    result.getInt("id"),
-                    result.getString("Dni"),
-                    result.getString("Nombre"),
-                    result.getString("Apellidos"),
-                    result.getString("Email"),
-                    result.getString("Telefono"),
-                    result.getBoolean("Perdida_Evaluacion"),
-                    result.getObject("Fecha_Matriculacion", LocalDateTime.class)
-            );
-            db.close();
-            return Optional.of(alumno);
+            ResultSet result = db.select(query, id).orElseThrow(() -> new SQLException("Error al consultar alumno con id: " + id));
+                if (result.next()) {
+                    Alumno alumno = new Alumno(
+                            result.getInt("id"),
+                            result.getString("Dni"),
+                            result.getString("Nombre"),
+                            result.getString("Apellidos"),
+                            result.getString("Email"),
+                            result.getString("Telefono"),
+                            result.getInt("Pruebas_Evaluacion"),
+                            result.getBoolean("Perdida_Evaluacion"),
+                            result.getObject("Fecha_Matriculacion", LocalDateTime.class)
+                    );
+                db.close();
+                return Optional.of(alumno);
         }
         return Optional.empty();
     }
@@ -52,23 +53,23 @@ public class AlumnoRepository implements IAlumnoRepository<Alumno> {
     public List<Alumno> findAll(DataBaseManager db) throws SQLException {
         String query = "SELECT * FROM alumno";
         db.open();
-        ResultSet result = db.select(query).orElseThrow(() -> new SQLException("Error al obtener todos los alumnos"));
-        List<Alumno> list = new ArrayList<>() {
-        };
-        while (result.next()) {
-            list.add(
-                    new Alumno(
-                            result.getInt("id"),
-                            result.getString("Dni"),
-                            result.getString("Nombre"),
-                            result.getString("Apellidos"),
-                            result.getString("Email"),
-                            result.getString("Telefono"),
-                            result.getBoolean("Perdida_Evaluacion"),
-                            result.getObject("Fecha_Matriculacion", LocalDateTime.class)
-                    )
-            );
-        }
+            ResultSet result = db.select(query).orElseThrow(() -> new SQLException("Error al obtener todos los alumnos"));
+            List<Alumno> list = new ArrayList<>();
+                while (result.next()) {
+                        list.add(
+                                new Alumno(
+                                        result.getInt("id"),
+                                        result.getString("Dni"),
+                                        result.getString("Nombre"),
+                                        result.getString("Apellidos"),
+                                        result.getString("Email"),
+                                        result.getString("Telefono"),
+                                        result.getInt("Pruebas_Evaluacion"),
+                                        result.getBoolean("Perdida_Evaluacion"),
+                                        result.getObject("Fecha_Matriculacion", LocalDateTime.class)
+                                )
+                        );
+            }
         db.close();
         return list;
     }
@@ -79,15 +80,26 @@ public class AlumnoRepository implements IAlumnoRepository<Alumno> {
      * @param dni dni a buscar
      * @return si existe un alumno con ese dni o no.
      */
-    @Override
-    public Alumno findByDni(String dni) {
-        Alumno exist=null;
-        for (Integer key :this.lista.keySet()){
-            if (this.lista.get(key).getDni().equals(dni)){
-                exist = this.lista.get(key);
-            }
-        }
-        return exist;
+    public Optional<Alumno> findByDni(String dni, DataBaseManager db) throws SQLException {
+        String query = "SELECT * FROM alumno WHERE dni = ?";
+        db.open();
+            ResultSet result = db.select(query, dni).orElseThrow(() -> new SQLException("Error al consultar alumno con dni: " + dni));
+                if (result.next()) {
+                        Alumno alumno = new Alumno(
+                                result.getInt("id"),
+                                result.getString("Dni"),
+                                result.getString("Nombre"),
+                                result.getString("Apellidos"),
+                                result.getString("Email"),
+                                result.getString("Telefono"),
+                                result.getInt("Pruebas_Evaluacion"),
+                                result.getBoolean("Perdida_Evaluacion"),
+                                result.getObject("Fecha_Matriculacion", LocalDateTime.class)
+                        );
+                    db.close();
+                    return Optional.of(alumno);
+                }
+            return Optional.empty();
     }
 
 
@@ -97,8 +109,16 @@ public class AlumnoRepository implements IAlumnoRepository<Alumno> {
      * @return el número de pruebas de evaluación en las que está metido.
      */
     @Override
-    public int hasEvaluationTest(int id) {
-        return this.lista.get(id).getEvaluationTests();
+    public int hasEvaluationTest(int id,DataBaseManager db) throws SQLException {
+        String query = "SELECT * FROM alumno WHERE id = ?";
+        db.open();
+            ResultSet result = db.select(query, id).orElseThrow(() -> new SQLException("Error al consultar alumno con id: " + id));
+                if (result.next()) {
+                    int evaluationTest = result.getInt("Pruebas_Evaluacion");
+                    db.close();
+                    return evaluationTest;
+            }
+        return -1;
     }
 
 
@@ -108,20 +128,38 @@ public class AlumnoRepository implements IAlumnoRepository<Alumno> {
      * @return el alumno añadido.
      */
     @Override
-    public Alumno create(Alumno value) {
-        this.lista.put(value.getId(),value);
-        return this.lista.get(value.getId());
+    public Alumno create(Alumno value,DataBaseManager db) throws SQLException {
+        String query = "INSERT INTO alumno VALUES (null, ?, ?, ?, ?, ?, ?, ?, ?)";
+        db.open();
+        ResultSet res = db.insert(query, value.getDni(),value.getName(),value.getLastName(),value.getEmail(),
+                value.getTelephone(),0,value.getEvaluationTests(),value.getRegistrationDate())
+                .orElseThrow(() -> new SQLException("Error al insertar alumno"));
+
+        if (res.first()) {
+            value.setId(res.getInt(1));
+            db.close();
+            return value;
+        }
+        return null;
     }
 
 
     /**
      * Eliminar alumno.
-     * @param id id del alumno a eliminar.
+     * @param value alumno que se va a eliminar.
      * @return el alumno eliminado.
      */
     @Override
-    public Alumno delete(int id) {
-        return this.lista.remove(id);
+    public Optional<Alumno> delete(Optional<Alumno> value, DataBaseManager db) throws SQLException {
+        String query = "DELETE FROM alumno WHERE id = ?";
+            db.open();
+                if (value.isPresent()) {
+                    db.delete(query, value.get().getId());
+                }else{
+                    throw new SQLException("Error al eliminar alumno");
+                }
+            db.close();
+        return value;
     }
 
 
@@ -144,13 +182,6 @@ public class AlumnoRepository implements IAlumnoRepository<Alumno> {
     }
 
 
-    /**
-     * Ver un alumno.
-     * @param id id del alumno a ver.
-     * @return el alumno si existe o null.
-     */
-    @Override
-    public Alumno readAlumno(int id) {
-        return this.lista.get(id);
-    }
+
+
 }

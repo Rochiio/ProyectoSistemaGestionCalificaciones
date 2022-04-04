@@ -25,12 +25,13 @@ public class AlumnoController {
      * Añadir estudiante.
      * @param newStudent estudiante a añadir.
      * @throws AlumnoException si existe ya un alumno con ese dni.
+     * @throws SQLException si hay error al buscar dni en la base de daots.
      */
-    public Alumno add(Alumno newStudent) throws AlumnoException {
+    public Alumno add(Alumno newStudent) throws AlumnoException, SQLException {
         Alumno returnStudent;
-        var exist = studentRepository.findByDni(newStudent.getDni());
-            if (exist==null){
-                returnStudent = studentRepository.create(newStudent);
+        var exist = studentRepository.findByDni(newStudent.getDni(),DataBaseManager.getInstance());
+            if (exist.isEmpty()){
+                returnStudent = studentRepository.create(newStudent,DataBaseManager.getInstance());
             }else{
                throw new AlumnoException("Ya existe un alumno con este DNI");
             }
@@ -44,17 +45,17 @@ public class AlumnoController {
      * @return el alumno eliminado
      * @throws AlumnoException si no existe ningún alumno con ese id o el alumno está añadido en pruebas de evaluación.
      */
-    public Alumno delete(int numberStudent) throws AlumnoException, SQLException {
-        Alumno returnStudent;
+    public Optional<Alumno> delete(int numberStudent) throws AlumnoException, SQLException {
+        Optional<Alumno> returnStudent;
         var exist = studentRepository.findById(numberStudent,DataBaseManager.getInstance());
-        if (exist.isPresent()) {
-            var numberEvaluation = studentRepository.hasEvaluationTest(numberStudent);
-            if (numberEvaluation==0) {
-                returnStudent = studentRepository.delete(numberStudent);
-            }else {
-                throw new AlumnoException("Error: No se puede eliminar a un alumno presente en una prueba de evaluación");
-            }
-        }else throw new AlumnoException("Error: No existe ningún alumno con este id");
+            if (exist.isPresent()) {
+                var numberEvaluation = studentRepository.hasEvaluationTest(numberStudent,DataBaseManager.getInstance());
+                    if (numberEvaluation==0) {
+                        returnStudent = studentRepository.delete(exist,DataBaseManager.getInstance());
+                    }else {
+                        throw new AlumnoException("Error: No se puede eliminar a un alumno presente en una prueba de evaluación");
+                    }
+            }else throw new AlumnoException("Error: No existe ningún alumno con este id");
         return returnStudent;
     }
 
@@ -101,8 +102,8 @@ public class AlumnoController {
         Alumno returnStudent;
         var exist = studentRepository.findById(id,DataBaseManager.getInstance());
             if (exist.isPresent()) {
-                var newDniOkey = studentRepository.findByDni(modify.getDni());
-                    if (newDniOkey == null || newDniOkey.getId()==exist.get().getId()) {
+                var newDniOkey = studentRepository.findByDni(modify.getDni(),DataBaseManager.getInstance());
+                    if (newDniOkey.isEmpty() || newDniOkey.get().getId()==exist.get().getId()) {
                         returnStudent = studentRepository.update(id, modify);
                     } else{
                         throw new AlumnoException("Ya existe un alumno con este dni");
