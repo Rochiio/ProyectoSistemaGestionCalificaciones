@@ -10,5 +10,5 @@ public interface ICRUAlumno<T> {
     Optional<T> findById(int id, DataBaseManager db) throws SQLException;
     T create(T value,DataBaseManager db) throws SQLException;
     Optional<T> delete(Optional<T> value,DataBaseManager db) throws SQLException;
-    T update(int id, T value) throws AlumnoException;
+    Optional<T> update(int id, T value,DataBaseManager db) throws AlumnoException, SQLException;
 }

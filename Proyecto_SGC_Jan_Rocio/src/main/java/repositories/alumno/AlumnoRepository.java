@@ -8,17 +8,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
 public class AlumnoRepository implements IAlumnoRepository<Alumno> {
-    private final HashMap<Integer, Alumno> lista= new HashMap<>();
 
 
     /**
      * Encontrar un alumno por su id.
      * @param id id del alumno a buscar.
+     * @param db base de datos.
      * @return el alumno si lo encuentra o null.
      */
     @Override
@@ -47,6 +46,7 @@ public class AlumnoRepository implements IAlumnoRepository<Alumno> {
 
     /**
      * Te devuelve todos los valores.
+     * @param db base de datos.
      * @return lista con todos los alumnos.
      */
     @Override
@@ -78,6 +78,7 @@ public class AlumnoRepository implements IAlumnoRepository<Alumno> {
     /**
      * Te devuelve si un alumno ya exite por dni ya que es único.
      * @param dni dni a buscar
+     * @param db base de datos.
      * @return si existe un alumno con ese dni o no.
      */
     public Optional<Alumno> findByDni(String dni, DataBaseManager db) throws SQLException {
@@ -106,6 +107,7 @@ public class AlumnoRepository implements IAlumnoRepository<Alumno> {
     /**
      * Para saber si el alumno está en alguna prueba de evaluación.
      * @param id identificador del alumno.
+     * @param db base de datos.
      * @return el número de pruebas de evaluación en las que está metido.
      */
     @Override
@@ -125,6 +127,7 @@ public class AlumnoRepository implements IAlumnoRepository<Alumno> {
     /**
      * Añadir alumno al repositorio.
      * @param value alumno a añadir.
+     * @param db base de datos.
      * @return el alumno añadido.
      */
     @Override
@@ -147,6 +150,7 @@ public class AlumnoRepository implements IAlumnoRepository<Alumno> {
     /**
      * Eliminar alumno.
      * @param value alumno que se va a eliminar.
+     * @param db base de datos.
      * @return el alumno eliminado.
      */
     @Override
@@ -167,18 +171,29 @@ public class AlumnoRepository implements IAlumnoRepository<Alumno> {
      * Actualizar datos de un alumno.
      * @param id id dle alumno a actualizar.
      * @param value nuevos valores del alumno.
+     * @param db base de datos.
      * @return el alumno actualizado.
      */
     @Override
-    public Alumno update(int id, Alumno value) {
-        var beforeData = this.lista.get(id);
-                this.lista.get(id).setDni((value.getDni().isEmpty())? beforeData.getDni() : value.getDni());
-                this.lista.get(id).setName((value.getName().isEmpty())? beforeData.getName(): value.getName());
-                this.lista.get(id).setLastName((value.getLastName().isEmpty())? beforeData.getLastName(): value.getLastName());
-                this.lista.get(id).setEmail((value.getEmail().isEmpty())? beforeData.getEmail(): value.getEmail());
-                this.lista.get(id).setTelephone((value.getTelephone().isEmpty())? beforeData.getTelephone(): value.getTelephone());
-                this.lista.get(id).setContinuousEvaluation(value.isContinuousEvaluation());
-        return this.lista.get(id);
+    public Optional<Alumno> update(int id, Alumno value, DataBaseManager db) throws SQLException {
+        var beforeData=this.findById(id,DataBaseManager.getInstance())
+                .orElseThrow(() -> new SQLException("Error al actualizar alumno. Alumno con id " + id + " no encontrado"));
+
+        String query = "UPDATE alumno SET Dni= ?, Nombre= ?, Apellidos= ?, Email= ?, Telefono= ?, Perdida_Evaluacion=?" +
+                " WHERE id = ?";
+
+            db.open();
+            db.update(query,
+                    ((value.getDni().isEmpty())? beforeData.getDni() : value.getDni()),
+                    ((value.getName().isEmpty())? beforeData.getName(): value.getName()),
+                    ((value.getLastName().isEmpty())? beforeData.getLastName(): value.getLastName()),
+                    ((value.getEmail().isEmpty())? beforeData.getEmail(): value.getEmail()),
+                    ((value.getTelephone().isEmpty())? beforeData.getTelephone(): value.getTelephone()),
+                    value.isContinuousEvaluation(),
+                    id
+            );
+            db.close();
+        return this.findById(id,db);
     }
 
 

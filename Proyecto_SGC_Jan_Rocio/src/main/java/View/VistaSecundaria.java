@@ -37,8 +37,8 @@ public class VistaSecundaria {
             try {
                   newStudent = new Alumno(
                         Inputs.inputWithRegex("[0-9]{8}[a-zA-Z]","Dime el DNi del alumno [NNNNNNNNL]"),
-                        Inputs.inputWithRegex("[A-Z][a-z]*","Dime el nombre del alumno"),
-                        Inputs.inputWithRegex("[A-Z][a-z]*[ ][A-Z][a-z]*","Dime los apellidos del alumno"),
+                        Inputs.inputWithRegex("[a-zA-Z][a-z]*","Dime el nombre del alumno"),
+                        Inputs.inputWithRegex("[a-zA-Z][a-z]*[ ][A-Z][a-z]*","Dime los apellidos del alumno"),
                         Inputs.inputWithRegex("[a-zA-Z,0-9]+[@][a-zA-Z,0-9]+[.][a-z]+","Dime el email del alumno"),
                         Inputs.inputWithRegex("[0-9]{3}[-][0-9]{6}","Dime el número de teléfono del alumno [NNN-NNNNNN]"),
                         (Inputs.inputWithRegex("^[0-1,$]$", "Tiene evaluación continua 1.Si 0.No").equals("1"))
@@ -113,7 +113,7 @@ public class VistaSecundaria {
                 Inputs.inputStrings("Dime los apellidos del alumno"),
                 Inputs.inputStrings("Dime el email del alumno"),
                 Inputs.inputStrings("Dime el número de teléfono del alumno [NNN-NNNNNN]"),
-                (Inputs.inputStrings( "Tiene evaluación continua 1.Si 0.No").equals("1"))
+                (Inputs.inputWithRegex("^[0-1,$]$", "Tiene evaluación continua 1.Si 0.No (Obligatorio)").equals("1"))
         );
 
             try {
