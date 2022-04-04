@@ -38,8 +38,9 @@ public class Alumno {
         this.registrationDate = LocalDateTime.now();
     }
 
+
     /**
-     * Constructor prueba para utilizar bases de datos.
+     * Constructor para las bases de datos
      * @param id id
      * @param dni DNI del alumno.
      * @param name Nombre del alumno.

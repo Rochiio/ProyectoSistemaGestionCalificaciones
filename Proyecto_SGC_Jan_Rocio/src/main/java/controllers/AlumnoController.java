@@ -98,13 +98,13 @@ public class AlumnoController {
      * @throws AlumnoException si no eiste un alumno con ese id.
      * @throws SQLException si hay un error al obtener el id.
      */
-    public Alumno modifyStudent(int id, Alumno modify) throws AlumnoException, SQLException {
-        Alumno returnStudent;
+    public Optional<Alumno> modifyStudent(int id, Alumno modify) throws AlumnoException, SQLException {
+        Optional<Alumno> returnStudent;
         var exist = studentRepository.findById(id,DataBaseManager.getInstance());
             if (exist.isPresent()) {
                 var newDniOkey = studentRepository.findByDni(modify.getDni(),DataBaseManager.getInstance());
                     if (newDniOkey.isEmpty() || newDniOkey.get().getId()==exist.get().getId()) {
-                        returnStudent = studentRepository.update(id, modify);
+                        returnStudent = studentRepository.update(id, modify,DataBaseManager.getInstance());
                     } else{
                         throw new AlumnoException("Ya existe un alumno con este dni");
                     }
