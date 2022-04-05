@@ -6,9 +6,10 @@ import controllers.DataBaseManager;
 import controllers.EvaluacionController;
 import models.evaluacion.Evaluacion;
 import repositories.alumno.AlumnoRepository;
+import repositories.calificaciones.CalificacionRepository;
 import repositories.categoria.CategoriaRepository;
 import repositories.pruebaEvaluacion.PruebaEvaluacionRepository;
-import utils.ApplicationProperties;
+import storage.TextoMarkdown;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -26,7 +27,8 @@ public class Main {
         VistaPrincipal pantalla = new VistaPrincipal
                 (new VistaSecundaria(new AlumnoController(new AlumnoRepository()),
                 new CategoriaController(new CategoriaRepository()),
-                        new EvaluacionController(new Evaluacion(new PruebaEvaluacionRepository()))));
+                        new EvaluacionController(new Evaluacion(PruebaEvaluacionRepository.getInstance())),
+                        CalificacionRepository.getInstance(),new TextoMarkdown()));
 
 
         pantalla.program();

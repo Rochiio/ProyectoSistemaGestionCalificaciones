@@ -15,19 +15,13 @@ public class TextoMarkdown implements IExport<PruebasEvaluacion> {
     private final String ruta = currentRelativePath.toAbsolutePath().toString();
     private String pruebasEvaluacion;
 
-    /**
-     * Constructor
-     */
-    public TextoMarkdown(String file) {
-        init(file);
-    }
 
 
     /**
      * Inicializar la ruta del fichero a donde el usuario elija.
      * @param file carpeta en la que va a querer guardar el fichero.
      */
-    private void init(String file) {
+    public void init(String file) {
         String dir = ruta + File.separator + file;
         this.pruebasEvaluacion= dir + File.separator + "pruebaEvaluacion.md";
             Path path = Paths.get(dir);
@@ -71,8 +65,6 @@ public class TextoMarkdown implements IExport<PruebasEvaluacion> {
             e.printStackTrace();
         } finally {
             try {
-                // Nuevamente aprovechamos el finally para
-                // asegurarnos que se cierra el fichero.
                 if (f != null)
                     f.close();
             } catch (Exception e2) {

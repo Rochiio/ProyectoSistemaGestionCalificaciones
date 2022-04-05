@@ -1,12 +1,27 @@
 package repositories.calificaciones;
 
-import exceptions.CalificacionException;
+import controllers.DataBaseManager;
 import models.calificacion.Calificacion;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class CalificacionRepository implements ICalificacionRepository<Calificacion> {
-    private final Map<Integer, Calificacion> qualifications = new HashMap<>();
+    public static CalificacionRepository instance=null;
+
+    /**
+     * Singleton
+     * @return siempre la misma instancia.
+     */
+    public static CalificacionRepository getInstance(){
+        if(instance ==null){
+            instance = new CalificacionRepository();
+        }
+        return instance;
+    }
 
 
     /**
@@ -14,57 +29,70 @@ public class CalificacionRepository implements ICalificacionRepository<Calificac
      * @return Devuelve las calificaciones.
      */
     @Override
-    public List<Calificacion> findAll() {
-        return new ArrayList<>(this.qualifications.values());
+    public List<Calificacion> findAll(DataBaseManager db) throws SQLException {
+        String query = "SELECT * FROM calificacion";
+        db.open();
+            ResultSet result = db.select(query).orElseThrow(() -> new SQLException("Error al obtener todos los alumnos"));
+                List<Calificacion> list = new ArrayList<>();
+                    while (result.next()) {
+                        list.add(
+                                new Calificacion(result.getInt("id"),
+                                        result.getInt("id_Alumno"),
+                                        result.getFloat("Nota"),
+                                        result.getObject("Entrega", LocalDateTime.class)
+                                )
+                        );
+            }
+        db.close();
+        return list;
     }
 
 
     /**
      * Buscar las calificaciones
-     * @param ratings calificaciones a buscar.
+     * @param idStudent calificacion a buscar por el id de alumno.
      * @return Devuelve la calificación buscada.
      */
     @Override
-    public Calificacion findByAlumno(Calificacion ratings) {
-        Calificacion exist=null;
-        for (Integer key :this.qualifications.keySet()){
-            if (this.qualifications.get(key).getStudent().equals(ratings.getStudent())){
-                exist = this.qualifications.get(key);
+    public Optional<Calificacion> findByAlumno(int idStudent, DataBaseManager db) throws SQLException {
+        String query = "SELECT * FROM calificacion WHERE id_Alumno = ?";
+        db.open();
+            ResultSet result = db.select(query, idStudent).orElseThrow(() -> new SQLException("Error al consultar alumno con id: " + idStudent));
+            if (result.next()) {
+                    Calificacion rating = new Calificacion(result.getInt("id"),
+                            result.getInt("id_Alumno"),
+                            result.getFloat("Nota"),
+                            result.getObject("Entrega", LocalDateTime.class)
+                    );
+                db.close();
+                return Optional.of(rating);
             }
-        }
-        return exist;
+        return Optional.empty();
     }
 
 
     /**
      *  Busca la calificaciones por si id
-     * @param id de la calificación a buscar.
+     * @param idRating de las calificaciones a buscar.
      * @return Devuelve la calificación buscada
      */
     @Override
-    public Calificacion findById(int id) {
-        return this.qualifications.get(id);
-    }
-
-
-    /**TODO LAS CALIFICACIONES NO SE PUEDEN MODIFICAR MIRA EL PDF
-     * TODO el repositorio te dije que no lanza excepciones eso lo hace el controlador
-     * Actualiza una calificación
-     * @param id de la calificaciones a actualizar
-     * @param newCalificacion la nueva calificación
-     * @return Devuelve la nueva calificación
-     * @throws CalificacionException
-     */
-    @Override
-    public Calificacion update(Integer id, Calificacion newCalificacion) throws CalificacionException {
-        var exists = findById(id);
-        if (exists.getId() == newCalificacion.getId()){
-            this.qualifications.get(id).setNota(newCalificacion.getNota());
-            this.qualifications.get(id).setDelivered(newCalificacion.getDelivered());
-        }else {
-            throw new CalificacionException("La calificaciones con ese id no existe.");
-        }
-        return this.qualifications.get(id);
+    public List<Calificacion> findById(int idRating, DataBaseManager db) throws SQLException {
+        String query = "SELECT * FROM calificacion WHERE id = ?";
+        db.open();
+            ResultSet result = db.select(query).orElseThrow(() -> new SQLException("Error al obtener las calificaciones con id " + idRating));
+            List<Calificacion> list = new ArrayList<>();
+                while (result.next()) {
+                    list.add(
+                            new Calificacion(result.getInt("id"),
+                                    result.getInt("id_Alumno"),
+                                    result.getFloat("Nota"),
+                                    result.getObject("Entrega", LocalDateTime.class)
+                            )
+                    );
+            }
+        db.close();
+        return list;
     }
 
 
@@ -73,12 +101,88 @@ public class CalificacionRepository implements ICalificacionRepository<Calificac
      * @return String en forma markdown.
      */
     @Override
-    public String toMarkdown() {
+    public String toMarkdown(DataBaseManager db) throws SQLException {
         StringBuilder result = new StringBuilder();
-            for (Calificacion calificacion : this.qualifications.values()){
+        List<Calificacion> list = this.findAll(db);
+            for (Calificacion calificacion : list){
                 result.append("- ").append(calificacion.toMarkdown()).append("\n");
             }
       return result.toString();
+    }
+
+
+    /**
+     * Conseguir la nota más alta de las calificaciones con un id.
+     * @param idRatings id de las calificaciones a buscar.
+     * @param db base de datos.
+     * @return el maximo.
+     * @throws SQLException si hay algún error con la base de datos.
+     */
+    @Override
+    public double getMax(int idRatings, DataBaseManager db) throws SQLException {
+        List<Calificacion> list = this.findById(idRatings,db);
+        DoubleSummaryStatistics rating = list.stream().mapToDouble(Calificacion::getNota).summaryStatistics();
+        return rating.getMax();
+    }
+
+
+    /**
+     * Conseguir la nota media de las calificaciones con un id.
+     * @param idRatings id de las calificaciones a buscar.
+     * @param db base de datos.
+     * @return el maximo.
+     * @throws SQLException si hay algún error con la base de datos.
+     */
+    @Override
+    public double getAverage(int idRatings, DataBaseManager db) throws SQLException {
+        List<Calificacion> list = this.findById(idRatings,db);
+        DoubleSummaryStatistics rating = list.stream().mapToDouble(Calificacion::getNota).summaryStatistics();
+        return rating.getAverage();
+    }
+
+
+    /**
+     * Conseguir la nota minima de las calificaciones con un id.
+     * @param idRatings id de las calificaciones a buscar.
+     * @param db base de datos.
+     * @return el maximo.
+     * @throws SQLException si hay algún error con la base de datos.
+     */
+    @Override
+    public double getMin(int idRatings, DataBaseManager db) throws SQLException {
+        List<Calificacion> list = this.findById(idRatings,db);
+        DoubleSummaryStatistics rating = list.stream().mapToDouble(Calificacion::getNota).summaryStatistics();
+        return rating.getMin();
+    }
+
+
+    /**
+     * Conseguir el procentaje de alumnos aprobados de un id concreto.
+     * @param idRatings id
+     * @param db base de datos
+     * @return la media de alumnos aprobados
+     * @throws SQLException si hay algún problema en la base de datos.
+     */
+    @Override
+    public double getPass(int idRatings, DataBaseManager db) throws SQLException {
+        List<Calificacion> list = this.findById(idRatings,db);
+        List<Calificacion> passStudentsNumber = list.stream().filter(a -> a.getNota() >= 5).collect(Collectors.toList());
+        return ((passStudentsNumber.size()/list.size())*list.size());
+    }
+
+
+    /**
+     * Conseguir el procentaje de alumnos suspendidos de un id concreto.
+     * @param idRatings id
+     * @param db base de datos
+     * @return la media de alumnos aprobados
+     * @throws SQLException si hay algún problema en la base de datos.
+     */
+    @Override
+    public double getFail(int idRatings, DataBaseManager db) throws SQLException {
+        List<Calificacion> list = this.findById(idRatings,db);
+        List<Calificacion> failStudentsNumber = list.stream().filter(a -> a.getNota() < 5).collect(Collectors.toList());
+        return ((failStudentsNumber.size()/list.size())*list.size());
     }
 
 
@@ -88,29 +192,44 @@ public class CalificacionRepository implements ICalificacionRepository<Calificac
      * @return Devuelve la calificación creada.
      */
     @Override
-    public Calificacion create(Calificacion item) {
-        this.qualifications.put(item.getId(), item);
-        return this.qualifications.get(item.getId());
+    public Calificacion create(Calificacion item, int id_Evaluation, DataBaseManager db) throws SQLException {
+        String query = "INSERT INTO calificacion VALUES (?, ?, ?, now())";
+        db.open();
+        ResultSet res = db.insert(query, id_Evaluation,item.getId_Student(),item.getNota())
+                .orElseThrow(() -> new SQLException("Error al insertar calificación"));
+
+        if (res.first()) {
+            item.setId(res.getInt(1));
+            db.close();
+            return item;
+        }
+        return null;
     }
 
 
     /**
      * Elimina una calificación.
-     * @param item calificación a eliminar
-     * @return Devuelve la calificación eliminada
+     * @param id id de calificación a eliminar.
+     * @return Devuelve la calificación eliminada.
      */
     @Override
-    public Calificacion delete(Calificacion item) {
-        return this.qualifications.remove(item.getId());
+    public int delete(int id, DataBaseManager db) throws SQLException {
+        String query = "DELETE FROM calificacion WHERE id = ?";
+        db.open();
+                db.delete(query, id);
+        db.close();
+        return id;
     }
 
 
     @Override
-    public String toString() {
+    public String toString(int id, DataBaseManager db) throws SQLException {
         StringBuilder sb = new StringBuilder();
-        for (Calificacion c : this.qualifications.values()){
-            sb.append(c.toString()).append("\n");
+        List<Calificacion> list = this.findById(id,db);
+        for (Calificacion calificacion : list){
+            sb.append(calificacion.toString()).append("\n");
         }
         return sb.toString();
     }
+
 }

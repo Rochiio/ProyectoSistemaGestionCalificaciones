@@ -12,7 +12,9 @@ public class CategoriaRepository implements ICategoriaRepository<Categoria> {
 
     /**
      * Devuelve todas las Categorías.
+     * @param db Base de datos.
      * @return Devuelve categoría.
+     * @throws SQLException si hay algún problema con la base de datos.
      */
     @Override
     public List<Categoria> findAll(DataBaseManager db) throws SQLException {
@@ -36,7 +38,9 @@ public class CategoriaRepository implements ICategoriaRepository<Categoria> {
     /**
      * Devuelve si una categoría tiene un nombre ya.
      * @param name nombre de la categoría.
+     * @param db Base de datos.
      * @return null o categoría.
+     * @throws SQLException si hay algún problema con la base de datos.
      */
     @Override
     public Optional<Categoria> findByName(String name, DataBaseManager db) throws SQLException {
@@ -58,7 +62,9 @@ public class CategoriaRepository implements ICategoriaRepository<Categoria> {
     /**
      * Crea una categoría
      * @param item que se va a crear.
+     * @param db Base de datos.
      * @return Devuelve categoría creada.
+     * @throws SQLException si hay algún problema con la base de datos.
      */
     @Override
     public Categoria save(Categoria item , DataBaseManager db) throws SQLException {
@@ -80,7 +86,9 @@ public class CategoriaRepository implements ICategoriaRepository<Categoria> {
      * Actualiza una categoría.
      * @param id de la categoría que se quiere actualizar.
      * @param newName categoría nueva.
+     * @param db Base de daots.
      * @return Devuelve la categoría actualizada.
+     * @throws SQLException si hay algún problema con la base de datos.
      */
     @Override
     public Optional<Categoria> update(Integer id, String newName, DataBaseManager db) throws SQLException {
@@ -90,7 +98,7 @@ public class CategoriaRepository implements ICategoriaRepository<Categoria> {
         String query = "UPDATE categoria SET Nombre= ? WHERE id = ?";
 
         db.open();
-        db.update(query,newName,id);
+        db.update(query,((newName.isEmpty())? beforeData.getName() : newName),id);
         db.close();
         return this.findById(id,db);
     }
@@ -100,7 +108,9 @@ public class CategoriaRepository implements ICategoriaRepository<Categoria> {
     /**
      * Buscar una categoria por su id.
      * @param id que desea Buscar.
+     * @param db Base de datos.
      * @return Devuelve la cateria, o nul si no existe.
+     * @throws SQLException si hay algún problema con la base de datos.
      */
     public Optional<Categoria> findById(int id, DataBaseManager db) throws SQLException {
         String query = "SELECT * FROM categoria WHERE id = ?";
