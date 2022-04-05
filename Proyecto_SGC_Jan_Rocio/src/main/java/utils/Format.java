@@ -33,7 +33,7 @@ public class Format {
 
 
     /**
-     * Formatear salida de los float.
+     * Formatear salida de los double.
      * @param note nota a formatear la salida.
      * @return nota en forma de String.
      */

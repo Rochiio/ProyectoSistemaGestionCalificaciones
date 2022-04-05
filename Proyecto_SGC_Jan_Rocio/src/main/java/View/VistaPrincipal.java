@@ -37,11 +37,9 @@ public class VistaPrincipal {
                 break;
             case 3: categoryManagementMenu();
                 break;
-            case 4: //Importar prueba de evaluación a markdown
+            case 4: secondaryView.toMarkdown();
                 break;
-            case 5: //Mostar prueba de evaluación
-                break;
-            case 6: //Importar/Exportar prueba de evaluación JSON
+            case 5: //Importar/Exportar prueba de evaluación JSON
                 break;
             case 0: System.out.println(colorize("\nAdiós, hasta pronto 👋", Attribute.CYAN_TEXT()));
                 break;
@@ -134,7 +132,7 @@ public class VistaPrincipal {
         switch (option) {
             case 1: secondaryView.showEvaluation();
                 break;
-            case 2: secondaryView.createEvaluation();
+            case 2: secondaryView.createPruebaEvaluation();
                 break;
             case 3: secondaryView.deleteEvaluation();
                 break;

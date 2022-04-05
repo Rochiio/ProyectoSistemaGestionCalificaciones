@@ -47,13 +47,13 @@ public class CategoriaController {
      * @return la categoría modificada.
      * @throws CategoriaException si no existe una categoría con ese id.
      */
-    public Categoria modifyCategory(int id, String newName) throws CategoriaException, SQLException {
-        Categoria returnCategory;
+    public Optional<Categoria> modifyCategory(int id, String newName) throws CategoriaException, SQLException {
+        Optional<Categoria> returnCategory;
         var exist = categoryRepository.findById(id, DataBaseManager.getInstance());
             if (exist.isPresent()) {
                 var newNameOkey = categoryRepository.findByName(newName,DataBaseManager.getInstance());
                     if (newNameOkey.isEmpty()) {
-                        returnCategory = categoryRepository.update(id, newName);
+                        returnCategory = categoryRepository.update(id, newName, DataBaseManager.getInstance());
                     } else {
                         throw new CategoriaException("Ya existe una categoría con este nombre");
                     }
