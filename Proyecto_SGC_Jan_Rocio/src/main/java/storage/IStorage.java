@@ -5,12 +5,14 @@ import java.util.List;
 public interface IStorage<T> {
     /**
      * Salvar los datos.
+     * @param item a guardar
      */
-    public void save();
+    void save(List<T> item);
 
     /**
      * Importar los datos
      * @return una lista de los datos.
      */
-    public List<T> load();
+    List<T> load();
+
 }

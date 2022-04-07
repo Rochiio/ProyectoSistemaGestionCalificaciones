@@ -142,17 +142,26 @@ public class PruebasEvaluacion {
     public String toMarkdown(){
     String result = "";
         try {
-            result= "# PruebasEvaluacion{ \n" +
-                    "** id=" + id + " ** \n" +
-                    "** date=" + Format.formatDateMedium(date) + " ** \n" +
-                    "** descripcion='" + descripcion + " ** \n" +
-                    "** maximumNote=" + Format.formatNote(maximumNote) + " ** \n" +
-                    "** minimumNote=" + Format.formatNote(minimumNote) + " ** \n" +
-                    "** averageGrade=" + Format.formatNote(averageGrade) + " ** \n" +
-                    "** passPercentages=" + Format.formatNote(passPercentages) + " ** \n" +
-                    "** failPercentages=" + Format.formatNote(failPercentages) + " ** \n" +
-                    "** categoriaRepository=" + idCategory + " ** \n" +
-                    "## idRatings=" + idRatings+
+            result= "# PruebasEvaluacion{" +
+                    "*id=" + id + "*" +
+                    ""+
+                    "*date=" + Format.formatDateMedium(date) + "*" +
+                    ""+
+                    "*descripcion='" + descripcion + " *" +
+                    ""+
+                    "*maximumNote=" + Format.formatNote(maximumNote) + "*" +
+                    ""+
+                    "*minimumNote=" + Format.formatNote(minimumNote) + "*" +
+                    ""+
+                    "*averageGrade=" + Format.formatNote(averageGrade) + "*" +
+                    ""+
+                    "*passPercentages=" + Format.floatPercentParser(passPercentages) + "*" +
+                    ""+
+                    "*failPercentages=" + Format.floatPercentParser(failPercentages) + "*" +
+                    ""+
+                    "*categoriaRepository=" + idCategory + "*" +
+                    ""+
+                    "**idRatings=" + idRatings+ "**"+
                     "# }";
         } catch (ParseException e) {
             e.printStackTrace();
@@ -161,8 +170,11 @@ public class PruebasEvaluacion {
     }
 
 
-    @Override
-    public String toString() {
+    /**
+     * Stirng formateado
+     * @return
+     */
+    public String toStringFormat() {
     String result = "";
             try {
                 result= "PruebasEvaluacion{" +
@@ -172,8 +184,8 @@ public class PruebasEvaluacion {
                         ", maximumNote=" + Format.formatNote(maximumNote) +
                         ", minimumNote=" + Format.formatNote(minimumNote) +
                         ", averageGrade=" + Format.formatNote(averageGrade) +
-                        ", passPercentages=" + Format.formatNote(passPercentages) +
-                        ", failPercentages=" + Format.formatNote(failPercentages) +
+                        ", passPercentages=" + Format.floatPercentParser(passPercentages) +
+                        ", failPercentages=" + Format.floatPercentParser(failPercentages) +
                         ", categoriaRepository=" + idCategory +
                         ", idRatings=" + idRatings +
                         '}';
@@ -181,6 +193,23 @@ public class PruebasEvaluacion {
                 e.printStackTrace();
             }
         return result;
+    }
+
+
+    @Override
+    public String toString() {
+        return "PruebasEvaluacion{" +
+                    "id=" + id +
+                    ", date=" + date +
+                    ", descripcion='" + descripcion + '\'' +
+                    ", maximumNote=" + maximumNote +
+                    ", minimumNote=" + minimumNote +
+                    ", averageGrade=" + averageGrade +
+                    ", passPercentages=" + passPercentages +
+                    ", failPercentages=" + failPercentages +
+                    ", categoriaRepository=" + idCategory +
+                    ", idRatings=" + idRatings +
+                    '}';
     }
 
 

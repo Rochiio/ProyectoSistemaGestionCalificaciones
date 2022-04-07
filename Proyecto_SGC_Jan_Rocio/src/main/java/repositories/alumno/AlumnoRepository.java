@@ -33,8 +33,8 @@ public class AlumnoRepository implements IAlumnoRepository<Alumno> {
                             result.getString("Apellidos"),
                             result.getString("Email"),
                             result.getString("Telefono"),
-                            result.getInt("Pruebas_Evaluacion"),
-                            result.getBoolean("Perdida_Evaluacion"),
+                            result.getBoolean("Alumno_Disponible"),
+                            result.getBoolean("Evaluacion_Continua"),
                             result.getObject("Fecha_Matriculacion", LocalDateTime.class)
                     );
                 db.close();
@@ -64,8 +64,8 @@ public class AlumnoRepository implements IAlumnoRepository<Alumno> {
                                         result.getString("Apellidos"),
                                         result.getString("Email"),
                                         result.getString("Telefono"),
-                                        result.getInt("Pruebas_Evaluacion"),
-                                        result.getBoolean("Perdida_Evaluacion"),
+                                        result.getBoolean("Alumno_Disponible"),
+                                        result.getBoolean("Evaluacion_Continua"),
                                         result.getObject("Fecha_Matriculacion", LocalDateTime.class)
                                 )
                         );
@@ -93,8 +93,8 @@ public class AlumnoRepository implements IAlumnoRepository<Alumno> {
                                 result.getString("Apellidos"),
                                 result.getString("Email"),
                                 result.getString("Telefono"),
-                                result.getInt("Pruebas_Evaluacion"),
-                                result.getBoolean("Perdida_Evaluacion"),
+                                result.getBoolean("Alumno_Disponible"),
+                                result.getBoolean("Evaluacion_Continua"),
                                 result.getObject("Fecha_Matriculacion", LocalDateTime.class)
                         );
                     db.close();
@@ -105,22 +105,22 @@ public class AlumnoRepository implements IAlumnoRepository<Alumno> {
 
 
     /**
-     * Para saber si el alumno está en alguna prueba de evaluación.
+     * Para saber si el alumno está disponible o no.
      * @param id identificador del alumno.
      * @param db base de datos.
      * @return el número de pruebas de evaluación en las que está metido.
      */
     @Override
-    public int hasEvaluationTest(int id,DataBaseManager db) throws SQLException {
+    public boolean isAvailableStudent(int id,DataBaseManager db) throws SQLException {
         String query = "SELECT * FROM alumno WHERE id = ?";
         db.open();
             ResultSet result = db.select(query, id).orElseThrow(() -> new SQLException("Error al consultar alumno con id: " + id));
                 if (result.next()) {
-                    int evaluationTest = result.getInt("Pruebas_Evaluacion");
+                    boolean available = result.getBoolean("Alumno_Disponible");
                     db.close();
-                    return evaluationTest;
+                    return available;
             }
-        return -1;
+        return false;
     }
 
 
@@ -135,7 +135,7 @@ public class AlumnoRepository implements IAlumnoRepository<Alumno> {
         String query = "INSERT INTO alumno VALUES (null, ?, ?, ?, ?, ?, ?, ?, ?)";
         db.open();
         ResultSet res = db.insert(query, value.getDni(),value.getName(),value.getLastName(),value.getEmail(),
-                value.getTelephone(),0,value.getEvaluationTests(),value.getRegistrationDate())
+                value.getTelephone(),value.getStudentAvailable(),value.getContinuousEvaluation(),value.getRegistrationDate())
                 .orElseThrow(() -> new SQLException("Error al insertar alumno"));
 
         if (res.first()) {
@@ -154,14 +154,10 @@ public class AlumnoRepository implements IAlumnoRepository<Alumno> {
      * @return el alumno eliminado.
      */
     @Override
-    public Optional<Alumno> delete(Optional<Alumno> value, DataBaseManager db) throws SQLException {
+    public Alumno delete(Alumno value, DataBaseManager db) throws SQLException {
         String query = "DELETE FROM alumno WHERE id = ?";
             db.open();
-                if (value.isPresent()) {
-                    db.delete(query, value.get().getId());
-                }else{
-                    throw new SQLException("Error al eliminar alumno");
-                }
+            db.delete(query, value.getId());
             db.close();
         return value;
     }
@@ -179,8 +175,8 @@ public class AlumnoRepository implements IAlumnoRepository<Alumno> {
         var beforeData=this.findById(id,DataBaseManager.getInstance())
                 .orElseThrow(() -> new SQLException("Error al actualizar alumno. Alumno con id " + id + " no encontrado"));
 
-        String query = "UPDATE alumno SET Dni= ?, Nombre= ?, Apellidos= ?, Email= ?, Telefono= ?, Perdida_Evaluacion=?" +
-                " WHERE id = ?";
+        String query = "UPDATE alumno SET Dni= ?, Nombre= ?, Apellidos= ?, Email= ?, Telefono= ?, Alumno_Disponible=? ," +
+                " Evaluacion_Continua= ? WHERE id = ?";
 
             db.open();
             db.update(query,
@@ -189,11 +185,26 @@ public class AlumnoRepository implements IAlumnoRepository<Alumno> {
                     ((value.getLastName().isEmpty())? beforeData.getLastName(): value.getLastName()),
                     ((value.getEmail().isEmpty())? beforeData.getEmail(): value.getEmail()),
                     ((value.getTelephone().isEmpty())? beforeData.getTelephone(): value.getTelephone()),
-                    value.isContinuousEvaluation(),
+                    value.getStudentAvailable(),
+                    value.getContinuousEvaluation(),
                     id
             );
             db.close();
         return this.findById(id,db);
+    }
+
+
+    /**
+     * Vaciar alumnos
+     * @param db base de datos
+     * @throws SQLException si hay algun error con la base.
+     */
+    @Override
+    public void clearAll(DataBaseManager db) throws SQLException {
+        String query = "DELETE FROM alumno";
+            db.open();
+            db.delete(query);
+            db.close();
     }
 
 

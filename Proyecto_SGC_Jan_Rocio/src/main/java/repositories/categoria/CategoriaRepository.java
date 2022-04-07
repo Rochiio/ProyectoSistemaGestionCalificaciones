@@ -128,4 +128,18 @@ public class CategoriaRepository implements ICategoriaRepository<Categoria> {
     }
 
 
+    /**
+     * Vaciar categoria
+     * @param db base de datos
+     * @throws SQLException si hay algun error con la base.
+     */
+    @Override
+    public void clearAll(DataBaseManager db) throws SQLException {
+        String query = "DELETE FROM categoria";
+        db.open();
+        db.delete(query);
+        db.close();
+    }
+
+
 }

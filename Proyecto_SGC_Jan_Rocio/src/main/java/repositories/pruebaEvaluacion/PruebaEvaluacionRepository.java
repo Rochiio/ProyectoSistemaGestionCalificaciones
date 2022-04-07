@@ -1,8 +1,8 @@
 package repositories.pruebaEvaluacion;
 
 import controllers.DataBaseManager;
+import models.calificacion.Calificacion;
 import models.pruebaEvaluacion.PruebasEvaluacion;
-import repositories.calificaciones.CalificacionRepository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -52,21 +52,26 @@ public class PruebaEvaluacionRepository implements IEvaluacionRepository<Pruebas
     /**
      * Despues de crear la prueba de evaluación, poder añadir las calificaciones.
      * @param evaluationTest prueba de evaluacion a la que se le van a añadir las calificaciones.
-     * @param ratingRepository repositorio de calificaciones.
+     * @param ratingRepository lista de las calificaciones de la prueba.
      * @param db base de datos.
      * @return la prueba de evaluacion
      * @throws SQLException
      */
-    public Optional<PruebasEvaluacion> updateRatings(PruebasEvaluacion evaluationTest,CalificacionRepository ratingRepository, DataBaseManager db) throws SQLException {
+    public Optional<PruebasEvaluacion> updateRatings(PruebasEvaluacion evaluationTest, List<Calificacion> ratingRepository, DataBaseManager db) throws SQLException {
         String query = "UPDATE evaluacion SET Nota_Maxima=?, Nota_Media=?, Nota_Minima=?,Porcentaje_Aprobados=?, " +
                 "Porcentaje_Suspensos=?, id_Calificaciones=? WHERE id = ?";
 
+        var pass =(((ratingRepository.stream().filter(a -> a.getNota()>=5).count())*100)/ (long) ratingRepository.size());
+        var fail = (((ratingRepository.stream().filter(a -> a.getNota()<5).count())*100)/ (long) ratingRepository.size());
+        DoubleSummaryStatistics stadistics = ratingRepository.stream().mapToDouble(Calificacion::getNota).summaryStatistics();
+
         db.open();
-        db.update(query, ratingRepository.getMax(evaluationTest.getId(),db)
-                ,ratingRepository.getAverage(evaluationTest.getId(),db)
-                ,ratingRepository.getMin(evaluationTest.getId(),db)
-                ,ratingRepository.getPass(evaluationTest.getId(),db)
-                ,ratingRepository.getFail(evaluationTest.getId(),db)
+        db.update(query,
+                stadistics.getMax()
+                ,stadistics.getAverage()
+                ,stadistics.getMin()
+                ,pass
+                ,fail
                 ,evaluationTest.getId()
                 ,evaluationTest.getId()
         );
@@ -148,5 +153,19 @@ public class PruebaEvaluacionRepository implements IEvaluacionRepository<Pruebas
             return Optional.of(test);
         }
         return Optional.empty();
+    }
+
+
+    /**
+     * Vaciar pruebas
+     * @param db base de datos
+     * @throws SQLException si hay algun error con la base.
+     */
+    @Override
+    public void clearAll(DataBaseManager db) throws SQLException {
+        String query = "DELETE FROM evaluacion";
+        db.open();
+        db.delete(query);
+        db.close();
     }
 }

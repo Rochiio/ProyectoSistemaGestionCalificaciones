@@ -39,13 +39,42 @@ public class VistaPrincipal {
                 break;
             case 4: secondaryView.toMarkdown();
                 break;
-            case 5: //Importar/Exportar prueba de evaluación JSON
+            case 5: jsonManagementMenu();
                 break;
             case 0: System.out.println(colorize("\nAdiós, hasta pronto 👋", Attribute.CYAN_TEXT()));
                 break;
 
         }
     }
+
+
+    /**
+     * Menu de gestión de importacion y exportacion de Json.
+     */
+    private void jsonManagementMenu() {
+        int option;
+        do {
+            option = Menu.jsonScreen();
+            switchJsonMenu(option);
+        }while(option != 0);
+    }
+
+
+    /**
+     * Switch del menu de gestión de Json.
+     * @param option opcion elegida.
+     */
+    private void switchJsonMenu(int option) {
+        switch (option) {
+            case 1: secondaryView.importJson();
+                break;
+            case 2: secondaryView.exportJson();
+                break;
+            case 0: System.out.println(colorize("Cerrando el gestor de Json ....",Attribute.GREEN_BACK()));
+                break;
+        }
+    }
+
 
     /**
      * Menu de gestión de categorías.
