@@ -1,9 +1,5 @@
 package models.pruebaEvaluacion;
 
-import models.calificacion.Calificacion;
-import models.categoria.Categoria;
-import repositories.calificaciones.CalificacionRepository;
-import repositories.calificaciones.ICalificacionRepository;
 import utils.Format;
 
 import java.text.ParseException;
@@ -12,37 +8,62 @@ import java.util.Objects;
 
 public class PruebasEvaluacion {
     //Declaración de los atributos de la clase
-    private static int contador = 0;
-    private final int id;
-    private final LocalDateTime date;
+    private int id;
+    private LocalDateTime date;
     private String descripcion;
+    private int idCategory;
     private float maximumNote;
-    private float minimumNote;
     private float averageGrade;
+    private float minimumNote;
     private float passPercentages;
     private float failPercentages;
-    private Categoria category;
-    private ICalificacionRepository<Calificacion> calificacionRepository;
+    private int idRatings;
 
 
-    public PruebasEvaluacion(LocalDateTime date, String descripcion, Categoria category,
-                             CalificacionRepository calificacionRepository) {
-        this.id = ++contador;
-        this.date = date;
+    /**
+     * Constructor
+     * @param descripcion descripcion
+     * @param idCategory categoria
+     */
+    public PruebasEvaluacion(String descripcion, int idCategory) {
         this.descripcion = descripcion;
-        this.category = category;
-        this.calificacionRepository = calificacionRepository;
-        this.maximumNote = maximumScore();
-        this.minimumNote = minimumScore();
-        this.averageGrade = averageScore();
-        this.passPercentages = percentageApproved();
-        this.failPercentages = failureRate();
-
+        this.idCategory = idCategory;
     }
 
 
+    /**
+     * Constructor base de datos.
+     * @param id id
+     * @param date fecha
+     * @param descripcion descripcion
+     * @param maximumNote nota maxima
+     * @param minimumNote nota minima
+     * @param averageGrade nota media
+     * @param passPercentages porcentaje de aprobados
+     * @param failPercentages porcentaje de suspensos
+     * @param idCategory categoria
+     * @param idRatings calificaciones
+     */
+    public PruebasEvaluacion(int id, LocalDateTime date, String descripcion, int idCategory, float maximumNote, float averageGrade,
+                             float minimumNote, float passPercentages, float failPercentages, int idRatings) {
+        this.id = id;
+        this.date = date;
+        this.descripcion = descripcion;
+        this.maximumNote = maximumNote;
+        this.minimumNote = minimumNote;
+        this.averageGrade = averageGrade;
+        this.passPercentages = passPercentages;
+        this.failPercentages = failPercentages;
+        this.idCategory = idCategory;
+        this.idRatings = idRatings;
+    }
+
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getDate() throws ParseException {
@@ -97,80 +118,20 @@ public class PruebasEvaluacion {
         this.failPercentages = failPercentages;
     }
 
-    public Categoria getCategory() {
-        return category;
+    public int getIdCategory() {
+        return idCategory;
     }
 
-    public void setCategory(Categoria category) {
-        this.category = category;
+    public void setIdCategory(int idCategory) {
+        this.idCategory = idCategory;
     }
 
-    public ICalificacionRepository getCalificacionRepository() {
-        return calificacionRepository;
+    public int getIdRatings() {
+        return idRatings;
     }
 
-    public void setCalificacionRepository(CalificacionRepository calificacionRepository) {
-        this.calificacionRepository = calificacionRepository;
-    }
-
-
-    /**
-     * Calcula la nota media
-     * @return Devuelve la nota media
-     * TODO hacerlo
-     */
-    private float averageScore(){
-        float score;
-        var todo = this.calificacionRepository.findAll();
-        for (Calificacion calificacion: this.calificacionRepository.findAll()
-             ) {
-
-        }
-        return 3.0f;
-    }
-
-
-    //TODO HACER METODO PARA OBJETENER EL MAXIMO
-    private float maximumScore() {
-        return 3.00F;
-    }
-
-
-    //TODO HACER METODO PARA OBJETENER EL minimo
-    private float minimumScore() {
-        return 3.00F;
-    }
-
-
-    /**
-     * Calcula el porcentaje de aprobados
-     * @return Devuelve el porcentaje de aprobados.
-     */
-    private float percentageApproved(){
-        float score = 0;
-        var notas = calificacionRepository.findAll();
-        for (var note: notas) {
-            if (note.getNota() >= 5){
-                score = note.getNota();
-            }
-        }
-        return score;
-    }
-
-
-    /**
-     * Calcula el procentaje de suspensos.
-     * @return Devuelve el porcentaje de suspensos
-     */
-    private float failureRate(){
-        float score = 0;
-        var notas = calificacionRepository.findAll();
-        for (var note: notas) {
-            if (note.getNota() < 5){
-                score = note.getNota();
-            }
-        }
-        return score;
+    public void setIdRatings(int idRatings) {
+        this.idRatings = idRatings;
     }
 
 
@@ -185,13 +146,13 @@ public class PruebasEvaluacion {
                     "** id=" + id + " ** \n" +
                     "** date=" + Format.formatDateMedium(date) + " ** \n" +
                     "** descripcion='" + descripcion + " ** \n" +
-                    "** maximumNote=" + maximumNote + " ** \n" +
-                    "** minimumNote=" + minimumNote + " ** \n" +
-                    "** averageGrade=" + averageGrade + " ** \n" +
-                    "** passPercentages=" + passPercentages + " ** \n" +
-                    "** failPercentages=" + failPercentages + " ** \n" +
-                    "** categoriaRepository=" + category + " ** \n" +
-                    "## calificacionRepository=" + calificacionRepository.toMarkdown()+
+                    "** maximumNote=" + Format.formatNote(maximumNote) + " ** \n" +
+                    "** minimumNote=" + Format.formatNote(minimumNote) + " ** \n" +
+                    "** averageGrade=" + Format.formatNote(averageGrade) + " ** \n" +
+                    "** passPercentages=" + Format.formatNote(passPercentages) + " ** \n" +
+                    "** failPercentages=" + Format.formatNote(failPercentages) + " ** \n" +
+                    "** categoriaRepository=" + idCategory + " ** \n" +
+                    "## idRatings=" + idRatings+
                     "# }";
         } catch (ParseException e) {
             e.printStackTrace();
@@ -208,13 +169,13 @@ public class PruebasEvaluacion {
                         "id=" + id +
                         ", date=" + Format.formatDateMedium(date) +
                         ", descripcion='" + descripcion + '\'' +
-                        ", maximumNote=" + maximumNote +
-                        ", minimumNote=" + minimumNote +
-                        ", averageGrade=" + averageGrade +
-                        ", passPercentages=" + passPercentages +
-                        ", failPercentages=" + failPercentages +
-                        ", categoriaRepository=" + category +
-                        ", calificacionRepository=" + calificacionRepository +
+                        ", maximumNote=" + Format.formatNote(maximumNote) +
+                        ", minimumNote=" + Format.formatNote(minimumNote) +
+                        ", averageGrade=" + Format.formatNote(averageGrade) +
+                        ", passPercentages=" + Format.formatNote(passPercentages) +
+                        ", failPercentages=" + Format.formatNote(failPercentages) +
+                        ", categoriaRepository=" + idCategory +
+                        ", idRatings=" + idRatings +
                         '}';
             } catch (ParseException e) {
                 e.printStackTrace();
@@ -222,17 +183,18 @@ public class PruebasEvaluacion {
         return result;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PruebasEvaluacion that = (PruebasEvaluacion) o;
-        return id == that.id && Float.compare(that.maximumNote, maximumNote) == 0 && Float.compare(that.minimumNote, minimumNote) == 0 && Float.compare(that.averageGrade, averageGrade) == 0 && Float.compare(that.passPercentages, passPercentages) == 0 && Float.compare(that.failPercentages, failPercentages) == 0 && Objects.equals(date, that.date) && Objects.equals(descripcion, that.descripcion) && Objects.equals(category, that.category) && Objects.equals(calificacionRepository, that.calificacionRepository);
+        return id == that.id && idCategory == that.idCategory && Float.compare(that.maximumNote, maximumNote) == 0 && Double.compare(that.averageGrade, averageGrade) == 0 && Double.compare(that.minimumNote, minimumNote) == 0 && Double.compare(that.passPercentages, passPercentages) == 0 && Double.compare(that.failPercentages, failPercentages) == 0 && idRatings == that.idRatings && date.equals(that.date) && descripcion.equals(that.descripcion);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, date, descripcion, maximumNote, minimumNote, averageGrade, passPercentages, failPercentages, category, calificacionRepository);
+        return Objects.hash(id, date, descripcion, maximumNote, minimumNote, averageGrade, passPercentages, failPercentages, idCategory, idRatings);
     }
 }
 

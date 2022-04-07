@@ -1,10 +1,14 @@
 package repositories.alumno;
 
+import controllers.DataBaseManager;
 import exceptions.AlumnoException;
 
+import java.sql.SQLException;
+import java.util.Optional;
+
 public interface ICRUAlumno<T> {
-    T create(T value);
-    T delete(int id);
-    T update(int id, T value) throws AlumnoException;
-    T readAlumno(int id);
+    Optional<T> findById(int id, DataBaseManager db) throws SQLException;
+    T create(T value,DataBaseManager db) throws SQLException;
+    Optional<T> delete(Optional<T> value,DataBaseManager db) throws SQLException;
+    Optional<T> update(int id, T value,DataBaseManager db) throws AlumnoException, SQLException;
 }

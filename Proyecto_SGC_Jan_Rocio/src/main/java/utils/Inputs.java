@@ -36,6 +36,27 @@ public class Inputs {
     }
 
 
+    /**
+     * Entradas de double.
+     * @param sentence pregunta.
+     * @return la respuesta del usuario.
+     */
+    public static float inputFloat(String sentence){
+        float result;
+        do {
+            try {
+                System.out.println(colorize(sentence, Attribute.CYAN_TEXT()));
+                result = in.nextFloat();
+            } catch (Exception e) {
+                result = -1;
+                in.next();
+            }
+        }while (result<0);
+
+        return  result;
+    }
+
+
 
 
 

@@ -4,7 +4,6 @@ import java.util.Objects;
 
 public class Categoria {
     //Atributo de la clase.
-    private static int contador = 0;
     private int id;
     private String name;
 
@@ -14,12 +13,26 @@ public class Categoria {
      * @param name de la categoría.
      */
     public Categoria(String name) {
-        this.id = ++contador;
+        //this.id = ++contador;
         this.name = name;
     }
 
 
+    /**
+     * Constructor para las bases de datos.
+     * @param id id de la categoría.
+     * @param name nombre de la categoría.
+     */
+    public Categoria(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     //-----------------------------Getter and Setter------------------------------------//
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public int getId() {
         return id;

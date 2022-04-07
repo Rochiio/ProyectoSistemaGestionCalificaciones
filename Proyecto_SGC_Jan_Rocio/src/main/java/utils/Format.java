@@ -1,5 +1,6 @@
 package utils;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -28,5 +29,16 @@ public class Format {
         final Locale locale = new Locale("es", "ES");
         return date.format(DateTimeFormatter
                 .ofLocalizedDate(FormatStyle.MEDIUM).withLocale(locale));
+    }
+
+
+    /**
+     * Formatear salida de los double.
+     * @param note nota a formatear la salida.
+     * @return nota en forma de String.
+     */
+    public static String formatNote (float note){
+        final Locale locale = new Locale("es", "ES");
+        return DecimalFormat.getCurrencyInstance(locale).format(note);
     }
 }

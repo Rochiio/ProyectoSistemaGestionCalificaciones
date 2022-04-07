@@ -14,7 +14,7 @@ public class Menu {
      * @return opción elegida.
      */
     public static int mainScreen() {
-        String regex="^[0-6,$]$";
+        String regex="^[0-5,$]$";
         String option;
             do {
                 System.out.println(colorize("\nElige una opción", Attribute.TEXT_COLOR(200)));
@@ -22,8 +22,7 @@ public class Menu {
                         " -2 Gestión pruebas de evaluación \n" +
                         " -3 Gestión de categorías de pruebas de evaluación \n" +
                         " -4 Importar prueba de evaluación a markdown \n" +
-                        " -5 Mostar evaluación \n" +
-                        " -6 Importar/Exportar evaluación \n" +
+                        " -5 Importar/Exportar prueba de evaluación a JSON \n" +
                         " -0 Salir");
                 option=in.nextLine();
             }while(!option.matches(regex));

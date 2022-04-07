@@ -7,14 +7,13 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Alumno {
-    private static int contador=0;
-    private final int id;
+    private int id;
     private String dni;     //NNNNNNNNL
     private String name;
     private String lastName;
     private String email;
     private String telephone;       //NNN-NNNNNN
-    private int evaluationTests=0;
+    private int evaluationTests=0;      //numero de pruebas de evaluacion en las que está añadido el usuario.
     private boolean continuousEvaluation;
     private final LocalDateTime registrationDate;      //DD/MM/AAAA
 
@@ -29,7 +28,7 @@ public class Alumno {
      * @param continuousEvaluation Si tiene o no evaluacion continua.
      */
     public Alumno(String dni, String name, String lastName, String email, String telephone, boolean continuousEvaluation) {
-        this.id = ++contador;
+//        this.id = ++contador;
         this.dni = dni;
         this.name = name;
         this.lastName = lastName;
@@ -40,7 +39,40 @@ public class Alumno {
     }
 
 
+    /**
+     * Constructor para las bases de datos
+     * @param id id
+     * @param dni DNI del alumno.
+     * @param name Nombre del alumno.
+     * @param lastName Apellidos del alumno.
+     * @param email Correo del alumno.
+     * @param telephone Teléfono del alumno.
+     * @param continuousEvaluation Si tiene o no evaluacion continua.
+     * @param registrationDate fecha registro
+     */
+    public Alumno(int id, String dni, String name, String lastName, String email, String telephone,int evaluationTests, boolean continuousEvaluation, LocalDateTime registrationDate) {
+        this.id = id;
+        this.dni = dni;
+        this.name = name;
+        this.lastName = lastName;
+        this.email = email;
+        this.telephone = telephone;
+        this.evaluationTests = evaluationTests;
+        this.continuousEvaluation = continuousEvaluation;
+        this.registrationDate = registrationDate;
+    }
+
+
     //------------------------------------------Getters & Setters-----------------------------------------------
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return this.id;
+    }
+
     public String getDni() {
         return dni;
     }
@@ -93,13 +125,15 @@ public class Alumno {
         return this.continuousEvaluation;
     }
 
+    public LocalDateTime getRegistrationDate() {
+        return registrationDate;
+    }
+
     public void setContinuousEvaluation(boolean continuousEvaluation) {
         this.continuousEvaluation = continuousEvaluation;
     }
 
-    public int getId() {
-        return this.id;
-    }
+
 
 
     @Override
@@ -126,6 +160,7 @@ public class Alumno {
                         ", lastName='" + lastName + '\'' +
                         ", email='" + email + '\'' +
                         ", telephone='" + telephone + '\'' +
+                        ", evaluationTest='" + evaluationTests + '\'' +
                         ", continuousEvaluation=" + continuousEvaluation +
                         ", registrationDate=" + Format.formatDateShort(registrationDate) +
                         '}';

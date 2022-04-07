@@ -1,32 +1,50 @@
 package View;
 
-import compares.AlumnoOrdenAlfabeticoComparator;
-import compares.AlumnoOrdenListaComparator;
 import controllers.AlumnoController;
 import controllers.CategoriaController;
+import controllers.DataBaseManager;
 import controllers.EvaluacionController;
 import exceptions.AlumnoException;
 import exceptions.CategoriaException;
 import exceptions.EvaluacionException;
 import models.alumno.Alumno;
+import models.calificacion.Calificacion;
 import models.categoria.Categoria;
 import models.pruebaEvaluacion.PruebasEvaluacion;
+import repositories.calificaciones.CalificacionRepository;
+import storage.IExport;
 import utils.Inputs;
 
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.util.Comparator;
+import java.util.Optional;
 
 
 public class VistaSecundaria {
     private final AlumnoController studentController;
     private final CategoriaController categoryController;
     private final EvaluacionController evaluationController;
+    private final CalificacionRepository ratingsRepository;
+    private final IExport<PruebasEvaluacion> textToMarkdown;
 
-    public VistaSecundaria(AlumnoController studentController, CategoriaController categoryController,EvaluacionController evaluacionController) {
+    /**
+     * Constructor
+     * @param studentController controlador de alumnos.
+     * @param categoryController controlador de categorías.
+     * @param evaluacionController controlador  de evaluaciones.
+     */
+    public VistaSecundaria(AlumnoController studentController, CategoriaController categoryController,
+                           EvaluacionController evaluacionController,CalificacionRepository ratingsRepository,
+                           IExport<PruebasEvaluacion> textToMarkdown) {
         this.studentController = studentController;
         this.categoryController = categoryController;
         this.evaluationController = evaluacionController;
+        this.ratingsRepository = ratingsRepository;
+        this.textToMarkdown = textToMarkdown;
     }
 
-    //Alumnos
+    //------------------------------------------------ALUMNOS----------------------------------------------------------
 
     /**
      * Añadir un alumno.
@@ -36,17 +54,17 @@ public class VistaSecundaria {
             try {
                   newStudent = new Alumno(
                         Inputs.inputWithRegex("[0-9]{8}[a-zA-Z]","Dime el DNi del alumno [NNNNNNNNL]"),
-                        Inputs.inputWithRegex("[A-Z][a-z]*","Dime el nombre del alumno"),
-                        Inputs.inputWithRegex("[A-Z][a-z]*[ ][A-Z][a-z]*","Dime los apellidos del alumno"),
+                        Inputs.inputWithRegex("[a-zA-Z][a-z]*","Dime el nombre del alumno"),
+                        Inputs.inputWithRegex("[a-zA-Z][a-z]*[ ][A-Z][a-z]*","Dime los apellidos del alumno"),
                         Inputs.inputWithRegex("[a-zA-Z,0-9]+[@][a-zA-Z,0-9]+[.][a-z]+","Dime el email del alumno"),
                         Inputs.inputWithRegex("[0-9]{3}[-][0-9]{6}","Dime el número de teléfono del alumno [NNN-NNNNNN]"),
                         (Inputs.inputWithRegex("^[0-1,$]$", "Tiene evaluación continua 1.Si 0.No").equals("1"))
                   );
 
-                  var mostrar = studentController.add(newStudent);
-                  System.out.println("Alumno añadido: " +mostrar);
+                  var show = studentController.add(newStudent);
+                  System.out.println("Alumno añadido: " + show.toString());
 
-            } catch (AlumnoException e) {
+            } catch (AlumnoException | SQLException e) {
                 System.out.println(e.getMessage());
             }
     }
@@ -57,13 +75,13 @@ public class VistaSecundaria {
      */
     public void deleteStudent() {
         var numberStudent = Inputs.inputWithRegex("[0-9]*","Dime el id del alumno a eliminar");
-        Alumno mostrar = null;
+        Optional<Alumno> show = Optional.empty();
             try {
-                mostrar = studentController.delete(Integer.parseInt(numberStudent));
-            } catch (AlumnoException e) {
+                show = studentController.delete(Integer.parseInt(numberStudent));
+            } catch (AlumnoException | SQLException  e) {
                 System.out.println(e.getMessage());
             }
-        System.out.println("Alumno eliminado: "+ mostrar);
+        System.out.println("Alumno eliminado: "+ show.toString());
     }
 
 
@@ -72,11 +90,11 @@ public class VistaSecundaria {
      */
     public void showStudent() {
         var numberIdStudent = Integer.parseInt(Inputs.inputWithRegex("[0-9]*","Dime el id del alumno a mostrar"));
-        Alumno show;
+        Optional<Alumno> show;
             try {
                 show = studentController.showStudent(numberIdStudent);
                 System.out.println(show.toString());
-            } catch (AlumnoException e) {
+            } catch (AlumnoException | SQLException e) {
                 System.out.println(e.getMessage());
             }
     }
@@ -90,16 +108,11 @@ public class VistaSecundaria {
         try {
             var show = studentController.showAllStudents();
                 if (option.equals("1")){
-                    show.sort(new AlumnoOrdenListaComparator());
+                    show.stream().sorted(Comparator.comparing(Alumno::getId)).forEach(System.out::println);
                 }else{
-                    show.sort(new AlumnoOrdenAlfabeticoComparator());
+                    show.stream().sorted(Comparator.comparing(Alumno::getName)).forEach(System.out::println);
                 }
-
-            for (Alumno alumno: show) {
-                System.out.println(alumno);
-            }
-
-        } catch (AlumnoException e) {
+        } catch (AlumnoException | SQLException e) {
             System.out.println(e.getMessage());
         }
     }
@@ -117,19 +130,19 @@ public class VistaSecundaria {
                 Inputs.inputStrings("Dime los apellidos del alumno"),
                 Inputs.inputStrings("Dime el email del alumno"),
                 Inputs.inputStrings("Dime el número de teléfono del alumno [NNN-NNNNNN]"),
-                (Inputs.inputStrings( "Tiene evaluación continua 1.Si 0.No").equals("1"))
+                (Inputs.inputWithRegex("^[0-1,$]$", "Tiene evaluación continua 1.Si 0.No (Obligatorio)").equals("1"))
         );
 
             try {
                 var returnStudent = studentController.modifyStudent(id,modify);
-                System.out.println("Modificado: " +returnStudent);
-            } catch (AlumnoException e) {
+                System.out.println("Modificado: " + returnStudent.toString());
+            } catch (AlumnoException | SQLException e) {
                 System.out.println(e.getMessage());
             }
     }
 
 
-    //Categorías
+    //--------------------------------------------CATEGORIAS-----------------------------------------------------------
 
 
     /**
@@ -141,8 +154,8 @@ public class VistaSecundaria {
         );
             try{
                 var show = categoryController.addCategory(newCategoria);
-                System.out.println("Categoría añadida: " +show.toString());
-            } catch (CategoriaException e) {
+                System.out.println("Categoría añadida: " + show.toString());
+            } catch (CategoriaException | SQLException e) {
                 System.out.println(e.getMessage());
             }
     }
@@ -158,7 +171,7 @@ public class VistaSecundaria {
                 try {
                     var returnCategory = categoryController.modifyCategory(id,newName);
                     System.out.println("Categoría modificada: " + returnCategory.toString());
-                } catch (CategoriaException e) {
+                } catch (CategoriaException | SQLException e) {
                     System.out.println(e.getMessage());
                 }
     }
@@ -169,11 +182,11 @@ public class VistaSecundaria {
      */
     public void showCategory() {
         var numberIdCategory = Integer.parseInt(Inputs.inputWithRegex("[0-9]*","Dime el id de la categoría a mostrar"));
-        Categoria show;
+        Optional<Categoria> show;
             try {
                 show = categoryController.showCategory(numberIdCategory);
                 System.out.println(show.toString());
-            } catch (CategoriaException e) {
+            } catch (CategoriaException | SQLException e) {
                 System.out.println(e.getMessage());
             }
     }
@@ -190,59 +203,104 @@ public class VistaSecundaria {
                     System.out.println(category.toString());
                 }
 
-        } catch (CategoriaException e) {
+        } catch (CategoriaException | SQLException e) {
             System.out.println(e.getMessage());
         }
     }
 
 
-    //Pruebas de evaluación
+    //----------------------------------------PRUEBAS DE EVALUACION----------------------------------------------------
 
 
     /**
      * Muestra una prueba de evaluacion.
      */
     public void showEvaluation(){
-        int option = Integer.parseInt(Inputs.inputWithRegex("[0-9]*","Dime el id de la prueba d eevaluación a ver"));
+        int option = Integer.parseInt(Inputs.inputWithRegex("[0-9]*","Dime el id de la prueba de evaluación a ver"));
             try{
-                var showTest = this.evaluationController.showTestEvaluation(option);
+                var showTest = this.evaluationController.showTestEvaluation(option, DataBaseManager.getInstance());
                 System.out.println(showTest.toString());
-            }catch (EvaluacionException e) {
+            }catch (EvaluacionException | SQLException e) {
                 System.out.println(e.getMessage());
             }
     }
 
 
     /**
-     * Crea una prueba evaluación
-     * TODO hacerlo
+     * Crea una prueba de evaluación.
+     * TODO revisar.
      */
-    public void createEvaluation(){
-        System.out.println("Crear una prueba de evaluación");
-        /*Evaluacion eva = new Evaluacion(new PruebaEvaluacionRepository(Inputs.inputStrings("Dime la descripción: "),
-                new Categoria(Inputs.inputStrings("Nombre de la valuación")),
-                new CalificacionRepository<Calificacion>(new Alumno(
-                        Inputs.inputStrings("Dime el DNi del alumno [NNNNNNNNL]"),
-                        Inputs.inputStrings("Dime el nombre del alumno"),
-                        Inputs.inputStrings("Dime los apellidos del alumno"),
-                        Inputs.inputStrings("Dime el email del alumno"),
-                        Inputs.inputStrings("Dime el número de teléfono del alumno [NNN-NNNNNN]"),
-                        (Inputs.inputStrings( "Tiene evaluación continua 1.Si 0.No").equals("1")))), 5.6F)));
+    public void createPruebaEvaluation(){
+        try {
+            PruebasEvaluacion newTest = new PruebasEvaluacion(
+                    Inputs.inputStrings("Dame una descripcíon de la prueba"),
+                    addCategoryTest()
+            );
+                var created = evaluationController.createPruebaEvaluation(newTest,DataBaseManager.getInstance());
 
+            String option = "";
+                do {
+                    var show = addAlumnsTest(created);
+                        ratingsRepository.create(show,created.getId(),DataBaseManager.getInstance());
+                        System.out.println("Calificacion creada: " + show);
+                    Inputs.inputWithRegex("[0-1]","Quieres seguir añadiendo calificaciones 1.Si 0.No");
+                }while(!option.equals("0"));
 
-        this.evaluacionController.CreateEvaluation(eva);*/
+            var finalTest= evaluationController.addRatings(created, CalificacionRepository.getInstance(),DataBaseManager.getInstance());
+            System.out.println("Prueba de evaluación creada: " + finalTest.get().toString());
+        } catch (CategoriaException | SQLException | EvaluacionException | ParseException | AlumnoException e) {
+            System.out.println(e.getMessage());
+        }
     }
+
+
+    /**
+     * Elegir la categoría para la prueba.
+     * @return id de la categoría
+     * @throws CategoriaException si no existe dicha categoría.
+     * @throws SQLException si hay problemas con la abse de daots.
+     */
+    private int addCategoryTest() throws CategoriaException, SQLException {
+        int numberIdCategory = Integer.parseInt(Inputs.inputWithRegex("[0-9]*",
+                "Dime el id de la categoría a añadir a la prueba"));
+        var exist = categoryController.showCategory(numberIdCategory);
+        if (exist.isEmpty()){
+            throw new CategoriaException("La categoría buscada no existe");
+        }
+       return exist.get().getId();
+    }
+
+
+    /**
+     * Añadir alumnos y sus calificaciones a una prueba de evaluación.
+     * @param test Prueba de evaluacion a la que se van a añadir.
+     * @return la nueva calificacion.
+     * @throws AlumnoException Si no existe el alumno.
+     * @throws SQLException problemas con la base de datos.
+     */
+    private Calificacion addAlumnsTest(PruebasEvaluacion test) throws AlumnoException, SQLException {
+        float value = 0;
+
+        int numberStudent = Integer.parseInt(Inputs.inputWithRegex("[0-9]*","Dime el id del alumno a añadir"));
+            var alumn = studentController.showStudent(numberStudent);
+                if (alumn.isPresent()){
+                    value = Inputs.inputFloat("Dime la nota del alumno");
+                }
+        return new Calificacion(test.getId(),alumn.get().getId(),value);
+    }
+
 
 
     /**
      * Elimina una prueba de evaluación.
      */
     public void deleteEvaluation() {
-        var deleteTest = Inputs.inputStrings("Introduce la evaluación a eliminar: ");
+        var deleteTest = Inputs.inputStrings("Introduce la prueba de evaluación a eliminar: ");
             try{
-                var res = this.evaluationController.deleteEvaluation(Integer.parseInt(deleteTest));
-                System.out.println("Prueba de evaluación eliminada: " + res.toString());
-            } catch (EvaluacionException e) {
+                var res = this.evaluationController.deleteEvaluation(Integer.parseInt(deleteTest), DataBaseManager.getInstance());
+                this.ratingsRepository.delete(res.getId(),DataBaseManager.getInstance());
+                System.out.println("Prueba de evaluación eliminada: " + res);
+            } catch (EvaluacionException | SQLException e) {
                 System.out.println(e.getMessage());
             }
     }
@@ -253,14 +311,45 @@ public class VistaSecundaria {
      */
     public void showAllEvaluations() {
         try{
-            var list = this.evaluationController.showAllTestEvaluation();
+            var list = this.evaluationController.showAllTestEvaluation(DataBaseManager.getInstance());
 
-                for (PruebasEvaluacion test : list){
-                    System.out.println(test.toString());
-                }
+                list.forEach(System.out::println);
 
-        } catch (EvaluacionException e) {
+        } catch (EvaluacionException | SQLException e) {
             System.out.println(e.getMessage());
         }
     }
+
+
+    //------------------------------------IMPORTAR A MARKDONW-----------------------------------------------------------
+
+    /**
+     * Importar una prueba de evaluacion a markdown.
+     */
+    public void toMarkdown() {
+        textToMarkdown.init(Inputs.inputStrings("Pon nombre a la carpeta en la que se va a guardar"));
+            int numberTest = Integer.parseInt(Inputs.inputWithRegex("[0-9]*","Dime el id de la prueba"));
+                try {
+                    var test = evaluationController.showTestEvaluation(numberTest,DataBaseManager.getInstance());
+                    if (test.isPresent()){
+                        var save = evaluationController.showTestEvaluation(Integer.parseInt
+                                (Inputs.inputWithRegex("[0-9]*","Dime el id de la prueba de evaluacion a exportar")),
+                                DataBaseManager.getInstance());
+                        save.ifPresent(textToMarkdown::save);
+                    }
+
+
+                } catch (EvaluacionException | SQLException e) {
+                    System.out.println(e.getMessage());
+                }
+
+    }
+
+
+
+
+
+
+
+
 }
