@@ -91,6 +91,24 @@ public class Menu {
     }
 
 
+    /**
+     * Menú de gestión de importar y exportar en json.
+     * @return opción elegida.
+     */
+    public static int jsonScreen(){
+        String regex="^[0-2,$]$";
+        String option;
+        do {
+            System.out.println(colorize("\nElige una opción", Attribute.TEXT_COLOR(200)));
+            System.out.println(" -1 Importar a Json \n" +
+                    " -2 Exportar a Json \n" +
+                    " -0 Salir");
+            option=in.nextLine();
+        }while(!option.matches(regex));
+        return Integer.parseInt(option);
+    }
+
+
 
 
 }

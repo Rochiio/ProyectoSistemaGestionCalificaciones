@@ -45,13 +45,14 @@ public class AlumnoController {
      * @return el alumno eliminado
      * @throws AlumnoException si no existe ningún alumno con ese id o el alumno está añadido en pruebas de evaluación.
      */
-    public Optional<Alumno> delete(int numberStudent) throws AlumnoException, SQLException {
-        Optional<Alumno> returnStudent;
+    public Alumno delete(int numberStudent) throws AlumnoException, SQLException {
+        Alumno returnStudent;
         var exist = studentRepository.findById(numberStudent,DataBaseManager.getInstance());
             if (exist.isPresent()) {
-                var numberEvaluation = studentRepository.hasEvaluationTest(numberStudent,DataBaseManager.getInstance());
-                    if (numberEvaluation==0) {
-                        returnStudent = studentRepository.delete(exist,DataBaseManager.getInstance());
+                var student = exist.get();
+                var isAvailable = studentRepository.isAvailableStudent(numberStudent,DataBaseManager.getInstance());
+                    if (isAvailable) {
+                        returnStudent = studentRepository.delete(student, DataBaseManager.getInstance());
                     }else {
                         throw new AlumnoException("Error: No se puede eliminar a un alumno presente en una prueba de evaluación");
                     }
@@ -66,12 +67,12 @@ public class AlumnoController {
      * @return el alumno.
      * @throws AlumnoException si no existe un alumno con ese id.
      */
-    public Optional<Alumno> showStudent(int numberIdStudent) throws AlumnoException, SQLException {
+    public Alumno showStudent(int numberIdStudent) throws AlumnoException, SQLException {
        var returnStudent = studentRepository.findById(numberIdStudent,DataBaseManager.getInstance());
            if (returnStudent.isEmpty()) {
                throw new AlumnoException("Error: No existe un alumno con este id");
            }
-        return returnStudent;
+        return returnStudent.get();
     }
 
 

@@ -1,6 +1,7 @@
 package controllers;
 
 import exceptions.EvaluacionException;
+import models.calificacion.Calificacion;
 import models.evaluacion.Evaluacion;
 import models.pruebaEvaluacion.PruebasEvaluacion;
 import repositories.calificaciones.CalificacionRepository;
@@ -78,7 +79,7 @@ public class EvaluacionController {
      * @return Prueba de evaluación terminada
      * @throws SQLException si hay algún problema con la base de datos.
      */
-    public Optional<PruebasEvaluacion> addRatings(PruebasEvaluacion test, CalificacionRepository ratingsRepository, DataBaseManager db) throws SQLException {
+    public Optional<PruebasEvaluacion> addRatings(PruebasEvaluacion test, List<Calificacion> ratingsRepository, DataBaseManager db) throws SQLException {
         return  this.evaluation.addRatings(test, ratingsRepository, db);
     }
 

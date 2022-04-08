@@ -1,5 +1,6 @@
-package storage;
+package storage.StorageMarkdown;
 
+import models.calificacion.Calificacion;
 import models.pruebaEvaluacion.PruebasEvaluacion;
 import utils.Format;
 
@@ -7,14 +8,19 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Locale;
+
 
 public class TextoMarkdown implements IExport<PruebasEvaluacion> {
     private final Path currentRelativePath = Paths.get("");
     private final String ruta = currentRelativePath.toAbsolutePath().toString();
     private String pruebasEvaluacion;
-
 
 
     /**
@@ -38,28 +44,35 @@ public class TextoMarkdown implements IExport<PruebasEvaluacion> {
     /**
      * Guardar el fichero en markdown.
      * @param item la prueba de evaluacion que se va a pasar a markdown.
+     * @param ratings lista de calificaciones de la prueba
      */
     @Override
-    public void save(PruebasEvaluacion item) {
+    public void save(PruebasEvaluacion item, List<Calificacion> ratings) {
         File fichero;
         BufferedWriter f = null;
         long startTime = System.nanoTime();
         try
         {
-            fichero = new File(pruebasEvaluacion);
-            System.out.println("Escribiendo en el fichero:"+fichero.getAbsolutePath());
+            fichero = new File(this.pruebasEvaluacion);
+            System.out.println("Escribiendo en el fichero:"+ fichero.getAbsolutePath());
 
 
-            // Creamos el buffer y le asociamos el fichero
-            // Usamos PrintWriter y no BufferedWriter porque tiene mejores metodos
-            // Pero podríamos usar BufferedWriter y usar \n
-            // al poner FileWriter -> true no sobrescribimos
-            f = new BufferedWriter(new FileWriter(fichero,true));
+                f = new BufferedWriter(new FileWriter(fichero,false));
 
-            f.write(item.toMarkdown());
+                f.write(item.toMarkdown());
+                f.write("\n");
+                for (Calificacion rating : ratings) {
+                    f.write(rating.toMarkdown());
+                }
+                f.write("\n");
+
 
             long endTime = System.nanoTime() - startTime; // tiempo en que se ejecuta su método
-            f.write("Informe generado el " +Format.formatDateMedium(LocalDateTime.now())+ " en " +endTime+" segundos.");
+            double seconds = (double)endTime / 1000000000.0;
+
+            f.write("\nInforme generado el día " +Format.formatDateShort(LocalDateTime.now())+ " a las " +
+                    LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")) + " en " +
+                    NumberFormat.getNumberInstance(Locale.getDefault()).format(seconds) +" segundos.");
 
         } catch (IOException | ParseException e) {
             e.printStackTrace();

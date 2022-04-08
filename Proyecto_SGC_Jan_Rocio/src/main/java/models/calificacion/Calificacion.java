@@ -77,14 +77,14 @@ public class Calificacion {
 
     /**
      * Para pasar a markdown la calificación
-     * @return String markdonw calificacion
+     * @return String markdown calificacion
      */
     public String toMarkdown() {
         return "## Calificacion{" +
-                "* id=" + id + " * \n" +
-                "* id_student=" + id_Student + " * \n" +
-                "* nota=" + Format.formatNote(nota) + " * \n" +
-                "* localDateTime=" + delivered + " * \n" +
+                "**id=" + id + "** \n" +
+                "**id_student=" + id_Student + "** \n" +
+                "**nota=" + Format.formatNote(nota) + "** \n" +
+                "**localDateTime=" + delivered + "** \n" +
                 "## }";
     }
 

@@ -9,7 +9,12 @@ import repositories.alumno.AlumnoRepository;
 import repositories.calificaciones.CalificacionRepository;
 import repositories.categoria.CategoriaRepository;
 import repositories.pruebaEvaluacion.PruebaEvaluacionRepository;
-import storage.TextoMarkdown;
+import storage.StorageJson.StorageAlumno.StorageAlumnoJson;
+import storage.StorageJson.StorageCalificacion.StoregeCalificacionJson;
+import storage.StorageJson.StorageCategoria.StorageCategoriaJson;
+import storage.StorageJson.StoragePruebaEva.StoragePruebaEvaluacionJson;
+import storage.StorageMarkdown.TextoMarkdown;
+import utils.ApplicationProperties;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -28,7 +33,8 @@ public class Main {
                 (new VistaSecundaria(new AlumnoController(new AlumnoRepository()),
                 new CategoriaController(new CategoriaRepository()),
                         new EvaluacionController(new Evaluacion(PruebaEvaluacionRepository.getInstance())),
-                        CalificacionRepository.getInstance(),new TextoMarkdown()));
+                        CalificacionRepository.getInstance(),new TextoMarkdown(), new StorageAlumnoJson(),
+                        new StorageCategoriaJson(), new StoragePruebaEvaluacionJson(), new StoregeCalificacionJson()));
 
 
         pantalla.program();
@@ -44,9 +50,7 @@ public class Main {
             controller.open();
             Optional<ResultSet> rs = controller.select("SELECT 'HOLA'");
             if (rs.isPresent()) {
-                System.out.println("entramos");
                 rs.get().next();
-                System.out.println("pasamos");
                 controller.close();
                 System.out.println("Conexión con la Base de Datos realizada con éxito");
             }
@@ -58,9 +62,9 @@ public class Main {
 
 
     private static void initData() {
-        //ApplicationProperties properties = new ApplicationProperties();
-        //boolean init = Boolean.parseBoolean(properties.readProperty("database.initdata"));
-        //if (init) {
+        ApplicationProperties properties = new ApplicationProperties();
+        boolean init = Boolean.parseBoolean(properties.readProperty("database.initdata"));
+        if (init) {
             System.out.println("Iniciamos los datos de ejemplo de la Base de Datos");
             DataBaseManager controller = DataBaseManager.getInstance();
             String dataPath = "sql" + File.separator + "init-db.sql";
@@ -68,7 +72,7 @@ public class Main {
                 var sqlFile = Main.class.getClassLoader().getResource(dataPath).getPath();
                 System.out.println(dataPath);
                 controller.open();
-                controller.initData(sqlFile, true);
+                controller.initData(sqlFile, false);
                 controller.close();
                 System.out.println("Datos inicializados con éxito");
             } catch (SQLException e) {
@@ -79,5 +83,7 @@ public class Main {
                 System.exit(1);
             }
         }
-    //}
+    }
+
+
 }

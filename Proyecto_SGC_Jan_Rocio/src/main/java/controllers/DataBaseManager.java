@@ -12,7 +12,7 @@ import java.util.Optional;
 
 public class DataBaseManager {
     private static DataBaseManager controller;
-    private final boolean fromProperties = false;
+    private final boolean fromProperties = true;
     private String serverUrl;
     private String serverPort;
     private String dataBaseName;
@@ -39,10 +39,8 @@ public class DataBaseManager {
      */
     private DataBaseManager() {
         if (fromProperties) {
-            System.out.println("Entrando en initConfigFromProperties");
             initConfigFromProperties();
         } else {
-            System.out.println("Entrando en initConfig");
             initConfig();
         }
     }

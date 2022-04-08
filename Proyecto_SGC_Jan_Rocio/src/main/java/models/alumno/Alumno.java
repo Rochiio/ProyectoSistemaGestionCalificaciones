@@ -13,7 +13,7 @@ public class Alumno {
     private String lastName;
     private String email;
     private String telephone;       //NNN-NNNNNN
-    private int evaluationTests=0;      //numero de pruebas de evaluacion en las que está añadido el usuario.
+    private boolean studentAvailable;      //numero de pruebas de evaluacion en las que está añadido el usuario.
     private boolean continuousEvaluation;
     private final LocalDateTime registrationDate;      //DD/MM/AAAA
 
@@ -25,15 +25,17 @@ public class Alumno {
      * @param lastName Apellidos del alumno.
      * @param email Correo del alumno.
      * @param telephone Teléfono del alumno.
+     * @param studentAvailable si el alumno está disponible.
      * @param continuousEvaluation Si tiene o no evaluacion continua.
      */
-    public Alumno(String dni, String name, String lastName, String email, String telephone, boolean continuousEvaluation) {
+    public Alumno(String dni, String name, String lastName, String email, String telephone, boolean studentAvailable, boolean continuousEvaluation) {
 //        this.id = ++contador;
         this.dni = dni;
         this.name = name;
         this.lastName = lastName;
         this.email = email;
         this.telephone = telephone;
+        this.studentAvailable = studentAvailable;
         this.continuousEvaluation = continuousEvaluation;
         this.registrationDate = LocalDateTime.now();
     }
@@ -50,14 +52,14 @@ public class Alumno {
      * @param continuousEvaluation Si tiene o no evaluacion continua.
      * @param registrationDate fecha registro
      */
-    public Alumno(int id, String dni, String name, String lastName, String email, String telephone,int evaluationTests, boolean continuousEvaluation, LocalDateTime registrationDate) {
+    public Alumno(int id, String dni, String name, String lastName, String email, String telephone, boolean studentAvailable, boolean continuousEvaluation, LocalDateTime registrationDate) {
         this.id = id;
         this.dni = dni;
         this.name = name;
         this.lastName = lastName;
         this.email = email;
         this.telephone = telephone;
-        this.evaluationTests = evaluationTests;
+        this.studentAvailable = studentAvailable;
         this.continuousEvaluation = continuousEvaluation;
         this.registrationDate = registrationDate;
     }
@@ -113,15 +115,15 @@ public class Alumno {
         this.telephone = telephone;
     }
 
-    public int getEvaluationTests() {
-        return evaluationTests;
+    public boolean getStudentAvailable() {
+        return studentAvailable;
     }
 
-    public void setEvaluationTests(int evaluationTests) {
-        this.evaluationTests = evaluationTests;
+    public void setStudentAvailable(boolean studentAvailable) {
+        this.studentAvailable = studentAvailable;
     }
 
-    public boolean isContinuousEvaluation() {
+    public boolean getContinuousEvaluation() {
         return this.continuousEvaluation;
     }
 
@@ -134,19 +136,17 @@ public class Alumno {
     }
 
 
-
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Alumno alumno = (Alumno) o;
-        return id == alumno.id && continuousEvaluation == alumno.continuousEvaluation && dni.equals(alumno.dni) && name.equals(alumno.name) && lastName.equals(alumno.lastName) && email.equals(alumno.email) && telephone.equals(alumno.telephone) && registrationDate.equals(alumno.registrationDate);
+        return id == alumno.id && studentAvailable == alumno.studentAvailable && continuousEvaluation == alumno.continuousEvaluation && dni.equals(alumno.dni) && name.equals(alumno.name) && lastName.equals(alumno.lastName) && email.equals(alumno.email) && telephone.equals(alumno.telephone) && registrationDate.equals(alumno.registrationDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, dni, name, lastName, email, telephone, continuousEvaluation, registrationDate);
+        return Objects.hash(id, dni, name, lastName, email, telephone, studentAvailable, continuousEvaluation, registrationDate);
     }
 
     @Override
@@ -160,7 +160,7 @@ public class Alumno {
                         ", lastName='" + lastName + '\'' +
                         ", email='" + email + '\'' +
                         ", telephone='" + telephone + '\'' +
-                        ", evaluationTest='" + evaluationTests + '\'' +
+                        ", studentAvailable='" + studentAvailable + '\'' +
                         ", continuousEvaluation=" + continuousEvaluation +
                         ", registrationDate=" + Format.formatDateShort(registrationDate) +
                         '}';

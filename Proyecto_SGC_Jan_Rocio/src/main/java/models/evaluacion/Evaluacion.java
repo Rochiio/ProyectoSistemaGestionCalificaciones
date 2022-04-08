@@ -1,7 +1,7 @@
 package models.evaluacion;
 
 import controllers.DataBaseManager;
-import repositories.calificaciones.CalificacionRepository;
+import models.calificacion.Calificacion;
 import repositories.pruebaEvaluacion.IEvaluacionRepository;
 import models.pruebaEvaluacion.PruebasEvaluacion;
 
@@ -57,7 +57,7 @@ public class Evaluacion {
      * @param test nueva prueba a añadir.
      * @return La prueba.
      */
-    public Optional<PruebasEvaluacion> addRatings(PruebasEvaluacion test, CalificacionRepository ratingRepository, DataBaseManager db) throws SQLException {
+    public Optional<PruebasEvaluacion> addRatings(PruebasEvaluacion test, List<Calificacion> ratingRepository, DataBaseManager db) throws SQLException {
         return this.evaluationTestRepository.updateRatings(test,ratingRepository,db);
     }
 

@@ -11,4 +11,5 @@ public interface ICategoriaRepository<T> extends ICRUDCategoria<T> {
     List<Categoria> findAll(DataBaseManager db) throws SQLException;
     Optional<T> findByName(String name, DataBaseManager db) throws SQLException;
     Optional<T> findById(int id, DataBaseManager db) throws SQLException;
+    void clearAll(DataBaseManager db) throws SQLException;
 }
